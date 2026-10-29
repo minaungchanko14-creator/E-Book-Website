@@ -1,0 +1,7 @@
+# Old copies kept locally only
+pasted-text.txt
+index-old-design.html
+
+# Local tool and system files
+.claude/
+.DS_Store

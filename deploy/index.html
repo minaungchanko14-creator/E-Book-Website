@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ong Sike Books — မြန်မာ E-books နှင့် AI Prompts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #070a12; --surface: #0d1220; --page: #0a0f1a; --card: #0f1626;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.14);
+    --ink: #f4f6fb; --ink-soft: #a1aabb; --ink-faint: #6b7487;
+    --accent: #3b82f6; --accent-2: #60a5fa; --accent-soft: rgba(59,130,246,0.14); --accent-text: #93c5fd;
+    --ok-text: #4ade80; --warn-text: #fdba74;
+    --grid: rgba(255,255,255,0.045); --glow: rgba(37,99,235,0.35);
+    --font: 'Inter', 'Noto Sans Myanmar', system-ui, sans-serif;
+    --font-display: 'Inter Tight', 'Inter', 'Noto Sans Myanmar', system-ui, sans-serif;
+    --r: 12px; --rLg: 18px;
+  }
+  body.light {
+    --bg: #f6f8fc; --surface: #ffffff; --page: #eef2f8; --card: #ffffff;
+    --line: #e2e8f0; --line-strong: #cbd5e1;
+    --ink: #0b1220; --ink-soft: #475569; --ink-faint: #94a3b8;
+    --accent: #2563eb; --accent-2: #3b82f6; --accent-soft: #eff6ff; --accent-text: #1d4ed8;
+    --ok-text: #166534; --warn-text: #9a3412;
+    --grid: rgba(15,23,42,0.06); --glow: rgba(59,130,246,0.22);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.65; font-size: 15px; -webkit-font-smoothing: antialiased; overflow-x: hidden; transition: background .25s, color .25s; }
+  a { color: inherit; }
+
+  /* LANG TOGGLE */
+  .lang-toggle { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 3px; gap: 2px; }
+  .lang-btn { padding: 5px 12px; border-radius: 100px; border: none; background: transparent; font-size: 12px; font-weight: 500; cursor: pointer; color: var(--ink-soft); transition: all .15s; font-family: var(--font); }
+  .lang-btn.active { background: var(--accent-soft); color: var(--ink); }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); padding: 0 max(16px, 5%); display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 18px; font-weight: 600; letter-spacing: -0.3px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .logo svg { color: var(--accent); flex-shrink: 0; }
+  .logo span { color: var(--accent-2); }
+  .nav-links { display: flex; list-style: none; gap: 28px; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 14px; transition: color .15s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s; flex-shrink: 0; }
+  .icon-btn:hover { background: var(--surface); border-color: var(--line); }
+  .nav-cta { background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); padding: 7px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: border-color .15s, background .15s; white-space: nowrap; }
+  .nav-cta:hover { border-color: var(--accent); }
+
+  /* HERO */
+  .hero-wrap { position: relative; padding: 0 max(16px, 5%) 40px; overflow: hidden; isolation: isolate; }
+  .hero-wrap::before { content: ''; position: absolute; inset: 0; z-index: -2;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, #000 30%, transparent 75%); }
+  .hero-wrap::after { content: ''; position: absolute; z-index: -1; left: 50%; top: -220px; width: 1100px; height: 700px; transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, var(--glow), transparent 65%); pointer-events: none; }
+  .hero { max-width: 820px; margin: 0 auto; padding: 96px 0 56px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-strong); color: var(--ink); font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 100px; margin-bottom: 28px; text-decoration: none; transition: border-color .15s; }
+  .hero-badge:hover { border-color: var(--accent); }
+  .hero-badge svg { color: var(--accent); }
+  h1 { font-family: var(--font-display); font-size: clamp(40px, 7.4vw, 78px); font-weight: 700; line-height: 1.04; letter-spacing: -0.035em; color: var(--ink); margin-bottom: 24px; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, #3b82f6, #60a5fa 55%, #93c5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  html:lang(my) h1 { font-size: clamp(32px, 5.6vw, 60px); line-height: 1.4; letter-spacing: 0; }
+  .hero-sub { font-size: 17px; color: var(--ink-soft); line-height: 1.75; max-width: 640px; margin-bottom: 36px; }
+  .hero-actions { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(180deg, #4f8ff7, #2f6fe8); color: #fff; border: none; padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; box-shadow: 0 10px 30px -6px rgba(59,130,246,0.6), inset 0 1px 0 rgba(255,255,255,0.25); transition: transform .15s, box-shadow .15s; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 36px -6px rgba(59,130,246,0.75), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .btn-ghost { background: transparent; color: var(--ink); border: none; padding: 14px 18px; border-radius: 100px; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; transition: color .15s; }
+  .btn-ghost:hover { color: var(--accent-2); }
+  .trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 32px; }
+  .trust-row > span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--line); border-radius: 100px; padding: 6px 14px; }
+  .social-proof { display: flex; align-items: center; gap: 14px; margin-top: 32px; text-align: left; }
+  .avatars { display: flex; }
+  .avatars span { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--bg); margin-left: -10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; }
+  .avatars span:first-child { margin-left: 0; }
+  .proof-stars { color: #fbbf24; font-size: 15px; letter-spacing: 2px; line-height: 1.2; }
+  .proof-text { font-size: 13px; color: var(--ink-soft); }
+
+  /* BROWSER MOCKUP */
+  .mockup { position: relative; max-width: 1020px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px -30px var(--glow), 0 0 0 1px rgba(255,255,255,0.02); }
+  .mock-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .mock-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .mock-url { flex: 0 1 260px; margin: 0 auto; transform: translateX(-30px); background: var(--page); border-radius: 8px; padding: 5px 14px; font-size: 12px; color: var(--ink-soft); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mock-body { display: grid; grid-template-columns: 176px 1fr; }
+  .mock-side { border-right: 1px solid var(--line); padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .mock-side a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13px; color: var(--ink-soft); text-decoration: none; transition: background .15s, color .15s; }
+  .mock-side a:hover { background: var(--page); color: var(--ink); }
+  .mock-side a.active { background: var(--accent-soft); color: var(--accent-2); }
+  .mock-main { padding: 22px 24px 26px; min-width: 0; }
+  .mock-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .mock-head strong { font-size: 15px; font-weight: 600; }
+  .mock-pill { background: var(--accent); color: #fff; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 100px; white-space: nowrap; }
+  .mock-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .mock-stat { background: var(--page); border: 1px solid var(--line); border-radius: 14px; padding: 16px 12px; text-align: center; }
+  .mock-stat-label { font-size: 12px; color: var(--ink-soft); }
+  .mock-stat-num { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 2px 0; }
+  .mock-stat-delta { font-size: 11px; color: var(--ok-text); }
+  .mock-books { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .book-card { display: flex; gap: 16px; align-items: center; background: var(--page); border: 1px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; transition: border-color .2s, transform .2s; }
+  .book-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .book-card img { width: 92px; border-radius: 6px; display: block; flex-shrink: 0; box-shadow: 0 10px 24px -8px rgba(0,0,0,0.5); }
+  .book-card-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .3px; padding: 3px 8px; border-radius: 100px; background: var(--accent-soft); color: var(--accent-text); margin-bottom: 6px; }
+  .book-card-title { font-size: 14px; font-weight: 600; line-height: 1.45; margin-bottom: 4px; }
+  .book-card-price { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--accent-2); }
+  .book-card-btn { margin-top: 8px; display: inline-flex; font-size: 12px; font-weight: 500; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 100px; padding: 4px 12px; }
+
+  /* SECTIONS */
+  .section { padding: 96px max(16px, 5%); }
+  .section-inner { max-width: 1000px; margin: 0 auto; }
+  .section-inner > .section-label, .section-inner > h2, .section-inner > .section-sub { text-align: center; }
+  .section-inner > .section-sub { max-width: 600px; margin-left: auto; margin-right: auto; }
+  .section-inner > .section-label { display: table; margin: 0 auto 16px; }
+  .section-label { font-size: 12px; font-weight: 500; letter-spacing: .4px; color: var(--accent-text); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); padding: 4px 12px; border-radius: 100px; margin-bottom: 14px; display: inline-block; }
+  h2 { font-family: var(--font-display); font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 12px; color: var(--ink); }
+  html:lang(my) h2 { letter-spacing: 0; line-height: 1.45; }
+  .section-sub { font-size: 16px; color: var(--ink-soft); margin-bottom: 48px; line-height: 1.75; }
+
+  /* CHAPTERS */
+  .chapters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .chapter-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--rLg); padding: 20px; display: flex; gap: 14px; align-items: flex-start; transition: border-color .2s, transform .2s; }
+  .chapter-card:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-2px); }
+  .chapter-num { font-size: 12px; font-weight: 600; color: var(--accent-text); background: var(--accent-soft); padding: 4px 9px; border-radius: 8px; flex-shrink: 0; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .chapter-title { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.55; }
+  .chapter-desc { font-size: 13px; color: var(--ink-soft); margin-top: 4px; line-height: 1.6; }
+
+  /* FEATURES */
+  .features-section { background: var(--page); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .features-grid { grid-template-columns: 1fr; } }
+  .feature-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--rLg); padding: 24px; transition: border-color .2s, transform .2s; }
+  .feature-card:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-2px); }
+  .feature-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+  .feature-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .feature-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+
+  /* BOOK 2 */
+  #book2 img { filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45)) !important; }
+
+  /* BUY SECTION */
+  .buy-section { position: relative; padding: 96px max(16px, 5%); color: #fff; overflow: hidden; isolation: isolate; }
+  .buy-section::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(37,99,235,0.35), transparent 70%); }
+  .buy-inner { max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; background: linear-gradient(180deg, #0f1a33, #0b1224); border: 1px solid rgba(96,165,250,0.25); border-radius: 24px; padding: 48px; box-shadow: 0 30px 80px -30px rgba(37,99,235,0.6); }
+  .buy-left h2 { color: #fff; font-size: 34px; margin-bottom: 12px; }
+  .buy-left p { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+  .buy-left .section-label { color: #93c5fd !important; background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.35); }
+  .price-display { display: flex; align-items: baseline; gap: 10px; margin-bottom: 28px; }
+  .price-main { font-family: var(--font-display); font-size: 48px; font-weight: 700; color: #fff; letter-spacing: -1.5px; }
+  .price-old { font-size: 16px; color: rgba(255,255,255,0.4); text-decoration: line-through; }
+  .price-currency { font-size: 18px; color: rgba(255,255,255,0.7); }
+  .btn-buy-main { background: linear-gradient(180deg, #4f8ff7, #2f6fe8); color: #fff; border: none; padding: 15px 36px; border-radius: 100px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: transform .15s, box-shadow .15s; font-family: var(--font); box-shadow: 0 10px 30px -6px rgba(59,130,246,0.6); }
+  .btn-buy-main:hover { transform: translateY(-1px); box-shadow: 0 14px 36px -6px rgba(59,130,246,0.8); }
+  .buy-includes { list-style: none; }
+  .buy-includes li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: rgba(255,255,255,0.8); padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.08); line-height: 1.5; }
+  .buy-includes li:last-child { border-bottom: none; }
+  .buy-includes li::before { content: '✓'; color: #60a5fa; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* REVIEWS */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .review-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--rLg); padding: 24px; display: flex; flex-direction: column; }
+  .review-stars { color: #fbbf24; font-size: 14px; letter-spacing: 2px; margin-bottom: 12px; }
+  .review-text { font-size: 14px; color: var(--ink-soft); line-height: 1.75; margin-bottom: 18px; flex: 1; }
+  .review-author { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; color: #fff; }
+  .av1 { background: #2563eb; } .av2 { background: #0891b2; } .av3 { background: #7c3aed; }
+  .author-name { font-size: 13px; font-weight: 600; }
+  .author-role { font-size: 12px; color: var(--ink-faint); }
+
+  /* SOCIAL */
+  #contact { padding: 96px max(16px, 5%) !important; }
+  #contact h2 { font-size: clamp(26px, 3.6vw, 36px) !important; }
+  #contact a[target], #contact a[href^="mailto"], #contact a[href^="viber"] { background: var(--card) !important; border-color: var(--line) !important; }
+  #contact a:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent) !important; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px max(16px, 5%); display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--ink-faint); background: var(--bg); }
+  footer a { color: var(--ink-faint); text-decoration: none; margin-left: 20px; }
+  footer a:hover { color: var(--ink); }
+
+  /* MODAL */
+  #payModal { background: rgba(2,6,16,0.7) !important; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  #payModal > div { border: 1px solid var(--line-strong); box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6); }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+  }
+  @media (max-width: 768px) {
+    .hero { padding: 64px 0 40px; }
+    .hero-sub { font-size: 15px; }
+    .mock-body { grid-template-columns: 1fr; }
+    .mock-side { display: none; }
+    .mock-url { transform: none; }
+    .mock-main { padding: 16px; }
+    .mock-books { grid-template-columns: 1fr; }
+    .mock-stat { padding: 12px 6px; }
+    .mock-stat-num { font-size: 18px; }
+    .section, .buy-section, #contact { padding-top: 64px !important; padding-bottom: 64px !important; }
+    #book2 .section-inner > div { grid-template-columns: 1fr !important; gap: 28px !important; }
+    #book2 .section-inner > div > div:last-child > div:first-of-type + h2 { text-align: left; }
+    .buy-inner { grid-template-columns: 1fr; gap: 28px; padding: 28px 20px; }
+    footer { flex-direction: column; gap: 14px; text-align: center; }
+    footer a { margin: 0 10px; }
+  }
+  @media (max-width: 480px) {
+    .lang-toggle .lang-btn { padding: 5px 9px; }
+    .nav-cta { display: none; }
+    .logo { font-size: 16px; }
+  }
+  /* 3-book showcase */
+  .mock-books { grid-template-columns: repeat(3, 1fr); }
+  .book-card { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+  .book-card img { width: 110px; }
+
+  /* BITCOIN BOOK */
+  .book3-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 50px; align-items: start; }
+  .book3-cover { text-align: center; position: sticky; top: 90px; }
+  .book3-cover img { width: 100%; max-width: 240px; border-radius: 12px; box-shadow: 0 30px 60px -20px rgba(234,179,8,0.35), 0 20px 40px -12px rgba(0,0,0,0.5); }
+  .book3-price { font-family: var(--font-display); font-size: 28px; font-weight: 700; margin: 18px 0 12px; }
+  .book3-tagline { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; color: #eab308; margin-bottom: 16px; }
+  .mini-chapters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+  .mini-chapter { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 13px; line-height: 1.5; }
+  .mini-chapter span { color: var(--accent-2); font-weight: 600; margin-right: 4px; }
+  .book3-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .book3-pills span { background: var(--accent-soft); color: var(--accent-text); padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 500; }
+  .book3-note { font-size: 12px; color: var(--ink-faint); line-height: 1.6; }
+
+  @media (max-width: 768px) {
+    .mock-books { grid-template-columns: 1fr; }
+    .book-card { flex-direction: row; text-align: left; gap: 16px; }
+    .book-card img { width: 92px; }
+    .book3-grid { grid-template-columns: 1fr; gap: 28px; }
+    .book3-cover { position: static; }
+    .mini-chapters { grid-template-columns: 1fr; }
+  }
+
+  /* PAYMENT: 2 steps */
+  .pay-step-label { font-size: 11px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .pay-h3 { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .pay-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 20px; }
+  .pick-list { display: flex; flex-direction: column; gap: 10px; }
+  .pick-item { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px 10px 10px; cursor: pointer; font-family: inherit; color: var(--ink); transition: border-color .15s, transform .15s, background .15s; }
+  .pick-item:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
+  .pick-item img { width: 52px; height: 74px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: var(--page); }
+  .pick-text { display: flex; flex-direction: column; min-width: 0; }
+  .pick-name { font-size: 14px; font-weight: 600; line-height: 1.45; }
+  .pick-en { font-size: 12px; color: var(--ink-faint); }
+  .pick-price { margin-left: auto; font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--accent-2); white-space: nowrap; }
+  .pick-arrow { font-size: 22px; color: var(--ink-faint); line-height: 1; }
+  .pay-back { background: none; border: none; color: var(--accent-2); font-size: 13px; font-weight: 500; cursor: pointer; padding: 0; margin-bottom: 14px; font-family: inherit; }
+  .pay-back:hover { text-decoration: underline; }
+  #payStep [data-key="pay_sub"] { display: none; }
+  .pay-selected { display: flex; align-items: center; gap: 12px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); border-radius: 12px; padding: 10px 14px 10px 10px; margin: 12px 0 20px; }
+  .pay-selected img { width: 40px; height: 58px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
+  #paySelName { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  #paySelPrice { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--accent-2); }
+  .pay-selected > span { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--ok-text); background: rgba(34,197,94,0.12); padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+
+  /* 4-item showcase */
+  .mock-books { grid-template-columns: repeat(4, 1fr); }
+  .book-card { padding: 12px 10px; }
+  .book-card img { width: 96px; }
+  @media (max-width: 1000px) { .mock-books { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .mock-books { grid-template-columns: 1fr; } .book-card { padding: 14px; } .book-card img { width: 92px; } }
+
+  /* 5-item showcase */
+  .mock-books { grid-template-columns: repeat(5, 1fr); }
+  .book-card img { width: 92px; }
+  @media (max-width: 1200px) { .mock-books { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 1000px) { .mock-books { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .mock-books { grid-template-columns: 1fr; } }
+
+  /* 6-item showcase */
+  .mock-books { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 1000px) { .mock-books { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .mock-books { grid-template-columns: 1fr; } }
+
+  /* AI IMAGE PROMPTS */
+  .prompt-features { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .prompt-feature { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .prompt-feature > span { width: 36px; height: 36px; border-radius: 10px; background: rgba(239,68,68,0.12); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .prompt-feature strong { font-size: 14px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .prompt-feature p { font-size: 12px; color: var(--ink-soft); line-height: 1.55; }
+  .prompt-cats span { background: rgba(239,68,68,0.1); color: #f87171; }
+  body.light .prompt-cats span { color: #b91c1c; }
+  @media (max-width: 768px) { .prompt-features { grid-template-columns: 1fr; } }
+
+  /* BUNDLE */
+  .buy-single { display: block; width: 100%; margin-top: 12px; background: none; border: none; color: rgba(255,255,255,0.7); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-family: var(--font); }
+  .buy-single:hover { color: #fff; }
+  .pick-bundle { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: var(--accent-soft); }
+  .pick-bundle-icon { width: 52px; height: 74px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; background: linear-gradient(160deg, #2563eb, #7c3aed); }
+  .pick-bundle .pick-en s { opacity: .7; }
+
+  /* PROMPT GALLERY */
+  .prompt-gallery { margin-top: 56px; text-align: center; }
+  .prompt-gallery h3 { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .prompt-gallery p { font-size: 14px; color: var(--ink-soft); margin-bottom: 24px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); gap: 12px; margin-bottom: 28px; }
+  .gallery-tile { padding: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; cursor: zoom-in; background: var(--card); aspect-ratio: 3 / 4; }
+  .gallery-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+  .gallery-tile:hover img { transform: scale(1.04); }
+  #galleryView { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,16,0.9); display: none; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+  #galleryView img { max-width: 100%; max-height: 90vh; border-radius: 12px; }
+  @media (max-width: 768px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* FREE SAMPLE */
+  .sample-card { text-align: center; background: var(--card); border: 1px solid var(--line-strong); border-radius: 24px; padding: 48px 32px; }
+  .sample-card .section-sub { max-width: 560px; margin: 0 auto 28px; }
+  .sample-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 28px; }
+  .sample-chip { display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--page); color: var(--ink); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color .15s, background .15s; }
+  .sample-chip img { width: 30px; height: 42px; object-fit: cover; border-radius: 4px; }
+  .sample-chip:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+  .sample-chip.active { border-color: var(--accent); background: var(--accent-soft); }
+  .sample-actions { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sample-wa { background: linear-gradient(180deg, #2bd46d, #1fae57); box-shadow: 0 10px 30px -6px rgba(37,211,102,0.5); font-family: inherit; }
+  .sample-actions .btn-ghost { font-family: inherit; }
+  .sample-link { display: inline-block; margin-top: 12px; font-size: 13px; color: var(--accent-2); text-decoration: none; }
+  .sample-link:hover { text-decoration: underline; }
+
+  /* FAQ */
+  .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .faq-item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 0 20px; transition: border-color .15s; }
+  .faq-item[open] { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .faq-item summary { list-style: none; cursor: pointer; padding: 18px 28px 18px 0; font-size: 15px; font-weight: 600; position: relative; line-height: 1.5; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 22px; font-weight: 400; color: var(--accent-2); }
+  .faq-item[open] summary::after { content: '−'; }
+  .faq-item p { font-size: 14px; color: var(--ink-soft); line-height: 1.75; padding-bottom: 18px; }
+  @media (max-width: 768px) { .sample-card { padding: 32px 18px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.94 14.06 4 20"/><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+    Ong Sike <span>Books</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#books" data-key="nav_books">စာအုပ်များ</a></li>
+    <li><a href="#prompts" data-key="nav_prompts">AI Prompts</a></li>
+    <li><a href="#chapters" data-key="nav_contents">အကြောင်းအရာ</a></li>
+    <li><a href="#faq" data-key="nav_faq">FAQ</a></li>
+    <li><a href="#contact" data-key="nav_contact">ဆက်သွယ်ရန်</a></li>
+  </ul>
+  <div class="nav-right">
+    <button onclick="toggleDark()" id="darkBtn" class="icon-btn" title="Light / Dark mode" aria-label="Light / Dark mode"></button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('my', event)">မြန်မာ</button>
+      <button class="lang-btn" onclick="setLang('en', event)">EN</button>
+    </div>
+    <a href="#buy" class="nav-cta" data-key="nav_cta" onclick="openPay(); return false;">ဝယ်ယူရန်</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-wrap">
+  <div class="hero">
+    <a href="#book5" class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+      <span data-key="hero_badge">E-book အသစ် — Digital Product Guide 2026</span>
+    </a>
+    <h1 data-key="hero_h1">ဘဝကို ပြောင်းလဲပေးမယ့်<br><em>စာအုပ်များ။</em></h1>
+    <p class="hero-sub" data-key="hero_sub">မြန်မာဘာသာဖြင့် ရေးသားထားသော E-books ၅ အုပ် — Mindset၊ Discipline၊ ငွေကြေး၊ Bitcoin နှင့် Digital Product အကြောင်း လက်တွေ့လမ်းညွှန်များ နှင့် AI Image Prompts အသစ်</p>
+    <div class="hero-actions">
+      <a href="#buy" class="btn-primary" onclick="openPay(); return false;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+        <span data-key="hero_btn1">ဝယ်ယူရန်</span>
+      </a>
+      <a href="#books" class="btn-ghost" data-key="hero_btn2">အကြောင်းအရာကြည့်ရန်</a>
+    </div>
+    <div class="trust-row">
+      <span>🇲🇲 <span data-key="trust1">မြန်မာဘာသာဖြင့်</span></span>
+      <span>📱 <span data-key="trust2">ဖုန်းဖြင့် ဖတ်နိုင်</span></span>
+      <span>💬 <span data-key="trust3">WhatsApp ဖြင့် ပို့ပေး</span></span>
+      <span>🔒 <span data-key="trust4">QR ဖြင့် ပေးချေ</span></span>
+    </div>
+  </div>
+
+  <div class="mockup" id="books">
+    <div class="mock-bar">
+      <span class="mock-dot" style="background:#ef4444;"></span>
+      <span class="mock-dot" style="background:#eab308;"></span>
+      <span class="mock-dot" style="background:#22c55e;"></span>
+      <div class="mock-url">ongsikebooks.com/library</div>
+    </div>
+    <div class="mock-body">
+      <aside class="mock-side">
+        <a href="#books" class="active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg><span data-key="side1">E-Books</span></a>
+        <a href="#chapters"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span data-key="side2">အခန်းများ</span></a>
+        <a href="#buy"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span data-key="side4">ငွေပေးချေရန်</span></a>
+        <a href="#contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-key="side5">ဆက်သွယ်ရန်</span></a>
+      </aside>
+      <div class="mock-main">
+        <div class="mock-head">
+          <strong data-key="mock_title">စာကြည့်တိုက်</strong>
+          <span class="mock-pill" data-key="mock_pill">RM 19.90 မှစ</span>
+        </div>
+        <div class="mock-stats">
+          <div class="mock-stat"><div class="mock-stat-label">E-Books</div><div class="mock-stat-num">5</div><div class="mock-stat-delta" data-key="ms1">↗ + AI Prompts</div></div>
+          <div class="mock-stat"><div class="mock-stat-label" data-key="ms2l">အခန်းများ</div><div class="mock-stat-num">48</div><div class="mock-stat-delta">↗ 8 + 13 + 10 + 12 + 5</div></div>
+          <div class="mock-stat"><div class="mock-stat-label" data-key="ms3l">ပေးချေနည်း</div><div class="mock-stat-num">QR</div><div class="mock-stat-delta">Maybank · TNG · MT</div></div>
+        </div>
+        <div class="mock-books">
+          <div class="book-card" onclick="openPay('မင်းပြောင်းလဲနိုင်ပါတယ်', 'RM 19.90', 0)">
+            <img src="assets/you-can-change-6e9e0ab5.jpg" alt="You Can Change">
+            <div>
+              <span class="book-card-tag">Ong Sike</span>
+              <div class="book-card-title">မင်းပြောင်းလဲနိုင်ပါတယ်</div>
+              <div class="book-card-price">RM 19.90</div>
+              <span class="book-card-btn" data-key="card_btn">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+          <div class="book-card" onclick="openPay('မင်းလုပ်နိုင်ပါတယ်', 'RM 29.99', 1)">
+            <img src="assets/you-can-do-it-d036a8a7.jpg" alt="You Can Do It">
+            <div>
+              <span class="book-card-tag">Ong Sike</span>
+              <div class="book-card-title">မင်းလုပ်နိုင်ပါတယ်</div>
+              <div class="book-card-price">RM 29.99</div>
+              <span class="book-card-btn" data-key="card_btn2">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+          <div class="book-card" onclick="openPay('Bitcoin: The New Money', 'RM 24.99', 2)">
+            <img src="assets/bitcoin-the-new-money-02b7580d.jpg" alt="Bitcoin: The New Money">
+            <div>
+              <span class="book-card-tag" style="background:rgba(34,197,94,0.14);color:var(--ok-text);" data-key="badge2">အသစ်</span>
+              <div class="book-card-title">Bitcoin: The New Money</div>
+              <div class="book-card-price">RM 24.99</div>
+              <span class="book-card-btn" data-key="card_btn3">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+          <div class="book-card" onclick="openPay('AI Image Prompts', 'RM 9.49', 3)">
+            <img src="assets/ai-image-prompts-e60f846c.jpg" alt="AI Image Prompts">
+            <div>
+              <span class="book-card-tag" style="background:rgba(239,68,68,0.14);color:#f87171;">Prompts</span>
+              <div class="book-card-title">AI Image Prompts</div>
+              <div class="book-card-price">RM 9.49</div>
+              <span class="book-card-btn" data-key="card_btn4">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+          <div class="book-card" onclick="openPay('The Rich Don\'t Work for Money', 'RM 39.99', 4)">
+            <img src="assets/the-rich-don-t-work-for-money-d99733c6.jpg" alt="The Rich Don't Work for Money">
+            <div>
+              <span class="book-card-tag" style="background:rgba(234,179,8,0.14);color:#eab308;" data-key="badge5">အသစ်</span>
+              <div class="book-card-title">The Rich Don't Work for Money</div>
+              <div class="book-card-price">RM 39.99</div>
+              <span class="book-card-btn" data-key="card_btn5">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+          <div class="book-card" onclick="openPay('Digital Product Business Guide 2026', 'RM 14.90', 5)">
+            <img src="assets/digital-product-business-guide-2026-6d198e4c.jpg" alt="Digital Product Business Guide 2026">
+            <div>
+              <span class="book-card-tag" style="background:rgba(34,211,238,0.14);color:#22d3ee;" data-key="badge6">အသစ်</span>
+              <div class="book-card-title">Digital Product Business Guide 2026</div>
+              <div class="book-card-price">RM 14.90</div>
+              <span class="book-card-btn" data-key="card_btn6">ဝယ်ယူရန် →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section class="section features-section" id="chapters">
+  <div class="section-inner">
+    <div class="section-label" data-key="ch_label">E-book ၁ · မင်းပြောင်းလဲနိုင်ပါတယ်</div>
+    <h2 data-key="ch_h2">မင်းပြောင်းလဲနိုင်ပါတယ် — အခန်း ၈ ခန်း</h2>
+    <p class="section-sub" data-key="ch_sub">ဘဝမပြောင်းလဲနိုင်ဘူးလို့ ထင်ရတဲ့ အကြောင်းရင်းများမှ စတင်ကာ တကယ်ပြောင်းလဲနိုင်သည့် လက်တွေ့နည်းလမ်းများ တဆင့်ချင်း ဖော်ပြထားသည်</p>
+    <div class="chapters-grid">
+      <div class="chapter-card">
+        <span class="chapter-num">01</span>
+        <div><div class="chapter-title" data-key="c1t">မပြောင်းလဲနိုင်ဘူးလို့ ထင်ရတဲ့ အကြောင်းရင်းများ</div><div class="chapter-desc" data-key="c1d">ကြောက်ရွ့ံမှု၊ အတိတ်အမှားများနှင့် ပတ်ဝန်းကျင်၏ သက်ရောက်မှု</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">02</span>
+        <div><div class="chapter-title" data-key="c2t">အတွေးအခေါ် ပြောင်းလဲခြင်း (Mindset)</div><div class="chapter-desc" data-key="c2d">Fixed vs Growth Mindset — ကြောက်ရွ့ံမှုကို အနိုင်ယူနည်း</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">03</span>
+        <div><div class="chapter-title" data-key="c3t">လက်ရှိဘဝကို တာဝန်ယူခြင်း</div><div class="chapter-desc" data-key="c3d">အကြောင်းပြချက်မများဘဲ ကိုယ့်ဘဝကို ကိုယ်ထိန်းချုပ်ရန်</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">04</span>
+        <div><div class="chapter-title" data-key="c4t">သေးသေးလေးကစတင်ပါ</div><div class="chapter-desc" data-key="c4d">ကြီးမားသော ပြောင်းလဲမှုများသည် သေးငယ်သော ခြေလှမ်းများမှ စတင်သည်</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">05</span>
+        <div><div class="chapter-title" data-key="c5t">မကျဆုံးဘူးဆိုတာ မရှိပါ</div><div class="chapter-desc" data-key="c5d">ကျဆုံးမှုကို ရန်သူမဟုတ်ဘဲ ဆရာအဖြစ် မြင်နည်း</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">06</span>
+        <div><div class="chapter-title" data-key="c6t">စည်းကမ်းနှင့် အလေ့အကျင့်</div><div class="chapter-desc" data-key="c6d">Motivation မဟုတ်ဘဲ Discipline ဖြင့် ဘဝကို တည်ဆောက်နည်း</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">07</span>
+        <div><div class="chapter-title" data-key="c7t">မင်းလိုချင်တဲ့ ဘဝကို မြင်ယောင်ပါ</div><div class="chapter-desc" data-key="c7d">Visualization ဖြင့် ဆုံးဖြတ်ချက်များနှင့် လုပ်ရပ်များကို ဦးတည်နည်း</div></div>
+      </div>
+      <div class="chapter-card">
+        <span class="chapter-num">08</span>
+        <div><div class="chapter-title" data-key="c8t">မင်းတကယ်ပြောင်းလဲနိုင်တယ်</div><div class="chapter-desc" data-key="c8d">ယနေ့ကစတင်ကာ မင်း၏ ဘဝဇာတ်လမ်းအသစ်ကို ဆက်ရေးပါ</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label" data-key="f_label">ဘာကြောင့် Ong Sike Books</div>
+    <h2 data-key="f_h2">ဒီ E-book တွေ ဝယ်ရမည့် အကြောင်း</h2>
+    <p class="section-sub" data-key="f_sub">ရှင်းလင်းသော ဘာသာစကားဖြင့် လက်တွေ့ကျသော အကြောင်းအရာများ</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🇲🇲</div>
+        <div class="feature-title" data-key="f1t">မြန်မာဘာသာ</div>
+        <div class="feature-desc" data-key="f1d">ဘယ်သူမဆို နားလည်လွယ်သော ရိုးရှင်းသည့် မြန်မာဘာသာဖြင့် ရေးသားထားသည်</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title" data-key="f2t">WhatsApp ဖြင့် ပို့ပေးမည်</div>
+        <div class="feature-desc" data-key="f2d">ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ဖိုင်ကို WhatsApp မှတဆင့် ပို့ပေးပါမည်</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title" data-key="f3t">ဘယ် Device မှမဆို</div>
+        <div class="feature-desc" data-key="f3d">Phone, tablet, laptop တွင် ဖတ်ရှုနိုင်သည်</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title" data-key="f4t">တစ်ကြိမ်ဝယ် ထာဝစဉ်</div>
+        <div class="feature-desc" data-key="f4d">တစ်ကြိမ်ဝယ်ယူလျှင် ထာဝစဉ် ဖတ်ရှုခွင့်ရမည်</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- BOOK 2 SECTION -->
+<section class="section features-section" id="book2">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:50px;align-items:start;max-width:900px;margin:0 auto;">
+      <div style="text-align:center;">
+        <img src="assets/you-can-do-it-d036a8a7.jpg" alt="You Can Do It Cover"
+             style="width:100%;max-width:220px;border-radius:12px;filter:drop-shadow(0 12px 28px rgba(0,0,0,0.15));" loading="lazy">
+        <div style="margin-top:16px;">
+          <div style="font-size:24px;font-weight:700;color:var(--ink);">RM 29.99</div>
+          <div style="font-size:13px;color:var(--ink-faint);text-decoration:line-through;">RM 39.90</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">E-Book အသစ် · Ong Sike</div>
+        <h2 style="margin-bottom:8px;">မင်းလုပ်နိုင်ပါတယ်</h2>
+        <p style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px;">YOU CAN DO IT — Mindset · Discipline · Action Plan</p>
+        <p class="section-sub" style="margin-bottom:24px;">သင့်ကို ယုံကြည်ပါ။ သင့်ကို တည်မြဲပါ။ သင်အနောက်ကိုကြည့်ရင် မင်းရဲ့ ကြိုးပမ်းမှုတွေကို မြင်ရမှာပါ — ရှေ့ဆက်ကြိုးစားပြီး အောင်မြင်ဖို့ လမ်းညွှန်ချက်တွေပါသည့် E-book ပါ။</p>
+
+        <!-- Chapters preview -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">01</span> Mindset ပြောင်းလဲခြင်း
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">02</span> ကိုယ့်ကိုယ်ကို ယုံကြည်ခြင်း
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">03</span> Discipline ဆိုတာ ဘာလဲ
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">04</span> အလေ့အကျင့်ကောင်းများ
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">05</span> ရည်မှန်းချက် သတ်မှတ်ခြင်း
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">06</span> Action Plan ရေးဆွဲခြင်း
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">07</span> အချိန်စီမံခန့်ခွဲခြင်း
+          </div>
+          <div style="background:var(--page);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;">
+            <span style="color:var(--accent);font-weight:600;">+6</span> နောက်ထပ် အခန်းများ...
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="background:var(--accent-soft);color:var(--accent-text);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">📚 အခန်း ၁၃ ခန်း</div>
+          <div style="background:var(--accent-soft);color:var(--accent-text);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">📋 30-Day Challenge ပါ</div>
+          <div style="background:var(--accent-soft);color:var(--accent-text);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">📝 Worksheet ပါ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK 3 SECTION: BITCOIN -->
+<section class="section" id="book3">
+  <div class="section-inner">
+    <div class="book3-grid">
+      <div class="book3-cover">
+        <img src="assets/bitcoin-the-new-money-02b7580d.jpg" alt="Bitcoin: The New Money Cover" loading="lazy">
+        <div class="book3-price">RM 24.99</div>
+        <button class="btn-primary" onclick="openPay('Bitcoin: The New Money', 'RM 24.99', 2)">ဝယ်ယူရန် →</button>
+        <a href="#sample" class="sample-link" onclick="pickSample(2)" data-key="sm_link">📖 အခမဲ့ နမူနာ ဖတ်ရန်</a>
+      </div>
+      <div>
+        <div class="section-label">E-Book အသစ် · Ong Sike</div>
+        <h2 style="margin-bottom:8px;">Bitcoin: The New Money</h2>
+        <p class="book3-tagline">LEARN · UNDERSTAND · PREPARE · BUILD YOUR FUTURE</p>
+        <p class="section-sub" style="margin-bottom:24px;">ငွေကြေးစနစ်အသစ်ကို ရိုးရိုးရှင်းရှင်း နားလည်စေရန် မြန်မာဘာသာဖြင့် ရေးသားထားသော E-book ပါ။ Bitcoin ဆိုတာ ဘာလဲ၊ Blockchain နည်းပညာ၊ အားသာချက်နှင့် အန္တရာယ်များကို နည်းပညာစကားလုံး မရှုပ်ဘဲ လေ့လာနိုင်ပါတယ်။</p>
+        <div class="mini-chapters">
+          <div class="mini-chapter"><span>01</span> Bitcoin ဆိုတာ ဘာလဲ</div>
+          <div class="mini-chapter"><span>02</span> ငွေဆိုတာ ဘာလဲ၊ ဘယ်လို ပြောင်းလဲလာသလဲ</div>
+          <div class="mini-chapter"><span>03</span> Bitcoin ကို ဘာကြောင့် New Money လို့ ခေါ်ကြသလဲ</div>
+          <div class="mini-chapter"><span>04</span> Blockchain နည်းပညာအကြောင်း ရိုးရိုးရှင်းရှင်း</div>
+          <div class="mini-chapter"><span>05</span> Bitcoin နဲ့ ရွှေ၊ ဒေါ်လာ၊ ဘဏ်စနစ် နှိုင်းယှဉ်ချက်</div>
+          <div class="mini-chapter"><span>06</span> Bitcoin ရဲ့ အားသာချက်များ</div>
+          <div class="mini-chapter"><span>07</span> Bitcoin ရဲ့ အန္တရာယ်များနှင့် သတိထားရမည့်အချက်များ</div>
+          <div class="mini-chapter"><span>08</span> Bitcoin ကို ဘယ်လို စတင်လေ့လာမလဲ</div>
+          <div class="mini-chapter"><span>09</span> အနာဂတ် ငွေကြေးစနစ်မှာ Bitcoin ရဲ့ နေရာ</div>
+          <div class="mini-chapter"><span>10</span> နိဂုံးချုပ်</div>
+        </div>
+        <div class="book3-pills">
+          <span>📚 အခန်း ၁၀ ခန်း</span>
+          <span>📄 စာမျက်နှာ ၂၅</span>
+          <span>🎓 ပညာပေး E-book</span>
+        </div>
+        <p class="book3-note">ဤစာအုပ်သည် ပညာပေးရည်ရွယ်ချက်အတွက်သာ ဖြစ်ပြီး ရင်းနှီးမြှုပ်နှံမှု အကြံပြုချက် မဟုတ်ပါ။</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK 4: THE RICH DON'T WORK FOR MONEY -->
+<section class="section features-section" id="book4">
+  <div class="section-inner">
+    <div class="book3-grid">
+      <div class="book3-cover">
+        <img src="assets/the-rich-don-t-work-for-money-d99733c6.jpg" alt="The Rich Don't Work for Money Cover" style="box-shadow:0 30px 60px -20px rgba(234,179,8,0.4),0 20px 40px -12px rgba(0,0,0,0.5);" loading="lazy">
+        <div class="book3-price">RM 39.99</div>
+        <button class="btn-primary" onclick="openPay('The Rich Don\'t Work for Money', 'RM 39.99', 4)">ဝယ်ယူရန် →</button>
+        <a href="#sample" class="sample-link" onclick="pickSample(3)" data-key="sm_link">📖 အခမဲ့ နမူနာ ဖတ်ရန်</a>
+      </div>
+      <div>
+        <div class="section-label">E-Book အသစ် · Ong Sike</div>
+        <h2 style="margin-bottom:8px;">The Rich Don't Work for Money</h2>
+        <p class="book3-tagline">BUILD ASSETS · CREATE FREEDOM · LIVE A RICHER LIFE</p>
+        <p class="section-sub" style="margin-bottom:24px;">ကိုယ့်ဝင်ငွေကို နားလည်စွာ စီမံပြီး အရေးပေါ်အတွက် ပြင်ဆင်ဖို့၊ ကျွမ်းကျင်မှုနဲ့ ဝင်ငွေလမ်းကြောင်းတွေကို တဖြည်းဖြည်း တိုးချဲ့ဖို့ လမ်းညွှန်ပေးတဲ့ မြန်မာဘာသာ လက်တွေ့လမ်းညွှန် E-book ပါ။ အခန်းတိုင်းမှာ အကျဉ်းချုပ်တစ်မျက်နှာ ပါဝင်ပါတယ်။</p>
+        <div class="mini-chapters">
+          <div class="mini-chapter"><span>01</span> ငွေထက် ရွေးချယ်ခွင့်ကို တည်ဆောက်ပါ</div>
+          <div class="mini-chapter"><span>02</span> ခံစားချက်ကို သိပြီးမှ ဆုံးဖြတ်ပါ</div>
+          <div class="mini-chapter"><span>03</span> ငွေဘယ်ကဝင်ပြီး ဘယ်ကိုထွက်သလဲ</div>
+          <div class="mini-chapter"><span>04</span> ပိုင်ဆိုင်မှုနဲ့ ငွေကြေးအင်အား</div>
+          <div class="mini-chapter"><span>05</span> အရေးပေါ်အချိန်အတွက် နေရာချန်ပါ</div>
+          <div class="mini-chapter"><span>06</span> အကြွေးရဲ့ တကယ့်ကုန်ကျစရိတ်</div>
+          <div class="mini-chapter"><span>07</span> ဝင်ငွေတိုးစေနိုင်တဲ့ ကျွမ်းကျင်မှု</div>
+          <div class="mini-chapter"><span>08</span> အပိုဝင်ငွေကို သေးသေးလေး စမ်းသပ်ပါ</div>
+          <div class="mini-chapter"><span>09</span> ဝင်ငွေကို ထိန်းပေးမယ့် စနစ်</div>
+          <div class="mini-chapter"><span>10</span> ရင်းနှီးမြှုပ်နှံခြင်းကို နားလည်ပြီးမှ စပါ</div>
+          <div class="mini-chapter"><span>11</span> အချိန်နဲ့ အားအင်ကိုလည်း ကာကွယ်ပါ</div>
+          <div class="mini-chapter"><span>12</span> ရက် ၃၀ အတွင်း အခြေခံတည်ဆောက်ပါ</div>
+        </div>
+        <div class="book3-pills">
+          <span>📚 အခန်း ၁၂ ခန်း</span>
+          <span>📄 စာမျက်နှာ ၃၉</span>
+          <span>📅 ရက် ၃၀ Plan ပါ</span>
+          <span>📝 အခန်းတိုင်း အကျဉ်းချုပ်</span>
+        </div>
+        <p class="book3-note">ဤစာအုပ်သည် ပညာပေးရည်ရွယ်ချက်အတွက်သာ ဖြစ်ပြီး ငွေကြေး သို့မဟုတ် ရင်းနှီးမြှုပ်နှံမှု အကြံပြုချက် မဟုတ်ပါ။</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK 5: DIGITAL PRODUCT BUSINESS GUIDE 2026 -->
+<section class="section" id="book5">
+  <div class="section-inner">
+    <div class="book3-grid">
+      <div class="book3-cover">
+        <img src="assets/digital-product-business-guide-2026-6d198e4c.jpg" alt="Digital Product Business Guide 2026 Cover" style="box-shadow:0 30px 60px -20px rgba(34,211,238,0.4),0 20px 40px -12px rgba(0,0,0,0.5);" loading="lazy">
+        <div class="book3-price">RM 14.90</div>
+        <button class="btn-primary" onclick="openPay('Digital Product Business Guide 2026', 'RM 14.90', 5)">ဝယ်ယူရန် →</button>
+        <a href="#sample" class="sample-link" onclick="pickSample(4)" data-key="sm_link">📖 အခမဲ့ နမူနာ ဖတ်ရန်</a>
+      </div>
+      <div>
+        <div class="section-label">E-Book အသစ် · Beginner Friendly</div>
+        <h2 style="margin-bottom:8px;">Digital Product Business Guide 2026</h2>
+        <p class="book3-tagline" style="color:#22d3ee;">CREATE · MARKET · SELL · GROW</p>
+        <p class="section-sub" style="margin-bottom:24px;">Digital Product ဖန်တီးရောင်းချခြင်း အဆင့်ဆင့်လမ်းညွှန်ပါ။ ၂၀၂၆ ခုနှစ် ဝယ်လိုအားမြင့် Product အမျိုးအစား ၆ မျိုးအတွက် idea ရှာခြင်းကနေ Launch လုပ်ပြီး ရောင်းချတဲ့အထိ လက်တွေ့လုပ်ဆောင်ရမည့် အဆင့်များ ပါဝင်ပါတယ်။</p>
+        <div class="mini-chapters">
+          <div class="mini-chapter"><span>01</span> မည်သည့် Product မဆို စတင်ရန် အခြေခံအဆင့် ၇ ဆင့်</div>
+          <div class="mini-chapter"><span>02</span> Product အမျိုးအစားအလိုက် လမ်းညွှန် — AI · Template · Course · Membership · Creative Asset · E-book</div>
+          <div class="mini-chapter"><span>03</span> Marketing နှင့် ရောင်းချခြင်း — Sales page၊ Traffic၊ ငွေလက်ခံ/ပို့ဆောင်ခြင်း</div>
+          <div class="mini-chapter"><span>04</span> ရက် ၉၀ လုပ်ငန်းစီမံချက်</div>
+          <div class="mini-chapter"><span>05</span> Launch မတိုင်မီ စစ်ဆေးရန်စာရင်း</div>
+          <div class="mini-chapter"><span>+</span> အမှားများ — ရှောင်ရန်</div>
+        </div>
+        <div class="book3-pills">
+          <span>📄 စာမျက်နှာ ၈</span>
+          <span>🧩 Product အမျိုးအစား ၆ မျိုး</span>
+          <span>📅 ရက် ၉၀ Plan</span>
+          <span>✅ Launch Checklist</span>
+        </div>
+        <p class="book3-note">ဤလမ်းညွှန်သည် ၂၀၂၆ ခုနှစ်လယ်အထိ ဈေးကွက်လမ်းကြောင်းများအပေါ် အခြေခံထားပါသည်။ Platform အခကြေးငွေနှင့် စည်းမျဉ်းများ ပြောင်းလဲနိုင်ပါသည်။</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI IMAGE PROMPTS -->
+<section class="section features-section" id="prompts">
+  <div class="section-inner">
+    <div class="book3-grid">
+      <div class="book3-cover">
+        <img src="assets/ai-image-prompts-e60f846c.jpg" alt="AI Image Prompts" style="max-width:280px;box-shadow:0 30px 60px -20px rgba(239,68,68,0.35),0 20px 40px -12px rgba(0,0,0,0.5);" loading="lazy">
+        <div class="book3-price">RM 9.49</div>
+        <button class="btn-primary" onclick="openPay('AI Image Prompts', 'RM 9.49', 3)">ဝယ်ယူရန် →</button>
+      </div>
+      <div>
+        <div class="section-label">အသစ် · Digital Product</div>
+        <h2 style="margin-bottom:8px;">AI Image Prompts</h2>
+        <p class="book3-tagline" style="color:#ef4444;">CREATE · INSPIRE · DO MORE</p>
+        <p class="section-sub" style="margin-bottom:24px;">Facebook ပေါ်မှာ နေ့တိုင်းတင်နေတဲ့ AI ပုံလှလှတွေကို ဖန်တီးခဲ့တဲ့ Prompt တွေကို အခုဝယ်ယူနိုင်ပါပြီ။ Copy ကူးပြီး AI ပုံဖန်တီးတဲ့ tool ထဲ ထည့်ရုံနဲ့ သင့်ကိုယ်ပိုင် ပုံလှလှတွေ ဖန်တီးနိုင်ပါတယ်။</p>
+        <div class="prompt-features">
+          <div class="prompt-feature"><span>💡</span><div><strong>High-Quality Prompts</strong><p>ရလဒ်ကောင်းအောင် စမ်းသပ်ပြီးသား Prompt များ</p></div></div>
+          <div class="prompt-feature"><span>⚙️</span><div><strong>သုံးရလွယ်</strong><p>Copy ကူးပြီး AI tool ထဲ ထည့်ရုံပါပဲ</p></div></div>
+          <div class="prompt-feature"><span>♾️</span><div><strong>Lifetime Access</strong><p>တစ်ကြိမ်ဝယ်ရင် ထာဝရ သုံးနိုင်</p></div></div>
+          <div class="prompt-feature"><span>👥</span><div><strong>Creator များအတွက်</strong><p>Facebook၊ TikTok content အတွက် အသင့်</p></div></div>
+        </div>
+        <div class="book3-pills prompt-cats"><span>Portrait</span><span>Landscape</span><span>Lifestyle</span><span>Nature</span><span>Anime &amp; Art</span><span>Product</span><span>နောက်ထပ်…</span></div>
+        <p class="book3-note">ငွေပေးချေပြီးနောက် Prompt ဖိုင်ကို WhatsApp မှတဆင့် ပေးပို့ပါမည်။</p>
+      </div>
+    </div>
+    <!-- GALLERY START -->
+    <div class="prompt-gallery">
+      <h3 data-key="gal_title">ဒီ Prompt တွေနဲ့ ဖန်တီးထားတဲ့ ပုံများ</h3>
+      <p data-key="gal_sub">Facebook ပေါ်မှာ တင်ခဲ့တဲ့ AI ပုံတွေပါ — ပုံကိုနှိပ်ပြီး အကြီးကြည့်နိုင်ပါတယ်</p>
+      <div class="gallery-grid" style="--cols:4;">
+      <button class="gallery-tile" onclick="openGallery(this)"><img src="assets/ai-image-1-b669221b.jpg" alt="AI image 1" loading="lazy"></button>
+      <button class="gallery-tile" onclick="openGallery(this)"><img src="assets/ai-image-2-1ccd8295.jpg" alt="AI image 2" loading="lazy"></button>
+      <button class="gallery-tile" onclick="openGallery(this)"><img src="assets/ai-image-3-f6900581.jpg" alt="AI image 3" loading="lazy"></button>
+      <button class="gallery-tile" onclick="openGallery(this)"><img src="assets/ai-image-4-c0591d9b.jpg" alt="AI image 4" loading="lazy"></button>
+      </div>
+      <button class="btn-primary" onclick="openPay('AI Image Prompts', 'RM 9.49', 3)" data-key="gal_btn">ဒီ Prompt တွေ ဝယ်ယူရန် — RM 9.49</button>
+    </div>
+    <!-- GALLERY END -->
+  </div>
+</section>
+
+<!-- FREE SAMPLE -->
+<section class="section" id="sample">
+  <div class="section-inner">
+    <div class="sample-card">
+      <div class="section-label" data-key="sm_label">🎁 အခမဲ့</div>
+      <h2 data-key="sm_h2">မဝယ်ခင် အခမဲ့ ဖတ်ကြည့်ပါ</h2>
+      <p class="section-sub" data-key="sm_sub">ဘယ်စာအုပ်ရဲ့ အခန်း ၁ ကိုမဆို အခမဲ့ ပို့ပေးပါမယ်။ စာအုပ်ရွေးပြီး WhatsApp ဒါမှမဟုတ် Telegram ကနေ တောင်းလိုက်ပါ။</p>
+      <div class="sample-chips">
+        <button class="sample-chip active" onclick="pickSample(0)"><img data-cover="0" alt=""><span>မင်းပြောင်းလဲနိုင်ပါတယ်</span></button>
+        <button class="sample-chip" onclick="pickSample(1)"><img data-cover="1" alt=""><span>မင်းလုပ်နိုင်ပါတယ်</span></button>
+        <button class="sample-chip" onclick="pickSample(2)"><img data-cover="2" alt=""><span>Bitcoin: The New Money</span></button>
+        <button class="sample-chip" onclick="pickSample(3)"><img data-cover="4" alt=""><span>The Rich Don't Work for Money</span></button>
+        <button class="sample-chip" onclick="pickSample(4)"><img data-cover="5" alt=""><span>Digital Product Business Guide 2026</span></button>
+      </div>
+      <div class="sample-actions">
+        <button class="btn-primary sample-wa" onclick="requestSample('wa')"><span data-key="sm_wa">💬 WhatsApp မှ တောင်းရန်</span></button>
+        <button class="btn-ghost" onclick="requestSample('tg')" data-key="sm_tg">Telegram မှ တောင်းရန် →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUY -->
+<section class="buy-section" id="buy">
+  <div class="buy-inner">
+    <div class="buy-left">
+      <div class="section-label" style="color:rgba(255,255,255,0.4);" data-key="buy_label">🎁 Bundle · RM 35.87 သက်သာ</div>
+      <h2 data-key="buy_h2">E-Books ၄ အုပ်လုံး</h2>
+      <p data-key="buy_sub">မင်းပြောင်းလဲနိုင်ပါတယ်၊ မင်းလုပ်နိုင်ပါတယ်၊ Bitcoin: The New Money နဲ့ The Rich Don't Work for Money — E-book ၄ အုပ်လုံးကို Bundle နဲ့ တစ်ခါတည်းဝယ်ရင် RM 35.87 သက်သာပါတယ်။</p>
+      <div class="price-display">
+        <span class="price-main">79</span>
+        <span class="price-currency" data-key="currency">RM</span>
+        <span class="price-old" data-key="price_old">RM 114.87</span>
+      </div>
+      <button class="btn-buy-main" data-key="buy_btn" onclick="openPay('E-book ၄ အုပ် Bundle', 'RM 79', -1)">Bundle ဝယ်ယူရန် →</button>
+      <button class="buy-single" data-key="buy_single" onclick="openPay()">သို့မဟုတ် တစ်အုပ်ချင်း ရွေးဝယ်ရန်</button>
+    </div>
+    <div class="buy-right">
+      <ul class="buy-includes">
+        <li data-key="inc1">မင်းပြောင်းလဲနိုင်ပါတယ် — RM 19.90</li>
+        <li data-key="inc2">မင်းလုပ်နိုင်ပါတယ် — RM 29.99 <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 6px;border-radius:100px;margin-left:4px;">NEW</span></li>
+        <li data-key="inc6">Bitcoin: The New Money — RM 24.99 <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 6px;border-radius:100px;margin-left:4px;">NEW</span></li>
+        <li data-key="inc8">The Rich Don't Work for Money — RM 39.99 <span style="background:#ca8a04;color:#fff;font-size:10px;padding:2px 6px;border-radius:100px;margin-left:4px;">NEW</span></li>
+        <li data-key="inc9">Digital Product Business Guide 2026 — RM 14.90 (Bundle မပါ) <span style="background:#0891b2;color:#fff;font-size:10px;padding:2px 6px;border-radius:100px;margin-left:4px;">NEW</span></li>
+        <li data-key="inc7">AI Image Prompts — RM 9.49 (Bundle မပါ၊ သီးသန့်ရောင်းသည်)</li>
+        <li data-key="inc3">ဘယ် Device မှမဆို ဖတ်ရှုနိုင်</li>
+        <li data-key="inc4">တစ်ကြိမ်ဝယ် ထာဝစဉ် ဖတ်ရှုခွင့်</li>
+        <li data-key="inc5">Touch'n Go / DuitNow ဖြင့် ပေးချေနိုင်</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section" id="reviews" hidden>
+  <div class="section-inner">
+    <div class="section-label" data-key="rev_label">ဖောက်သည်များ မှတ်ချက်</div>
+    <h2 data-key="rev_h2">သူများ ဘာပြောကြသနည်း</h2>
+    <p class="section-sub" data-key="rev_sub">စစ်မှန်သော သုံးသပ်ချက်များ</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text" data-key="r1">"ဒီ E-book ဖတ်ပြီးနောက် ကိုယ့်ဘဝကို တာဝန်ယူနည်းကို နားလည်သွားတယ်။ Mindset ပြောင်းလဲမှုအပိုင်းက တကယ်ကို အသုံးဝင်တယ်"</div>
+        <div class="review-author">
+          <div class="avatar av1">MT</div>
+          <div><div class="author-name" data-key="r1n">မောင်သောင်း</div><div class="author-role" data-key="r1r">ကျောင်းသား · ရန်ကုန်</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text" data-key="r2">"Discipline နဲ့ Habit တည်ဆောက်ခြင်းအပိုင်းက ငါ့ဘဝကိုတကယ်ပြောင်းပေးတယ်။ ဒီစာအုပ်ကို မည်သူမဆို ဖတ်သင့်တယ်"</div>
+        <div class="review-author">
+          <div class="avatar av2">NM</div>
+          <div><div class="author-name" data-key="r2n">နန်းမိုး</div><div class="author-role" data-key="r2r">လုပ်ငန်းရှင် · မန္တလေး</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text" data-key="r3">"ကျဆုံးမှုကို မကြောက်တော့ဘူး။ ဒီစာအုပ်ဖတ်ပြီး ကျဆုံးမှုကို ဆရာအဖြစ်မြင်တတ်လာတယ်"</div>
+        <div class="review-author">
+          <div class="avatar av3">AZ</div>
+          <div><div class="author-name" data-key="r3n">အောင်ဇင်</div><div class="author-role" data-key="r3r">Freelancer · ရခိုင်</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2 data-key="faq_h2">မေးလေ့ရှိသော မေးခွန်းများ</h2>
+    <p class="section-sub" data-key="faq_sub">မေးစရာ ကျန်သေးရင် WhatsApp ကနေ မေးနိုင်ပါတယ်</p>
+    <div class="faq-list">
+      <details class="faq-item"><summary data-key="q1">ငွေပေးပြီး ဘယ်လောက်ကြာမှ E-book ရမလဲ?</summary><p data-key="a1">ငွေလွှဲ screenshot ကို WhatsApp ပို့ပြီး ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ဖိုင်ကို WhatsApp ကနေ ပို့ပေးပါတယ်။ ၂၄ နာရီအတွင်း ပြန်လည်တုံ့ပြန်ပေးပါတယ်။</p></details>
+      <details class="faq-item"><summary data-key="q2">ဘယ်လို ငွေပေးချေရမလဲ?</summary><p data-key="a2">ဝယ်ယူရန် ကိုနှိပ်ပြီး စာအုပ်ရွေးပါ။ ပြီးရင် Maybank၊ Touch 'n Go ဒါမှမဟုတ် Merchantrade DuitNow QR ကို သင့် Banking / E-wallet app နဲ့ scan ဖတ်ပြီး ပေးချေနိုင်ပါတယ်။</p></details>
+      <details class="faq-item"><summary data-key="q3">Malaysia ပြင်ပကနေ ဝယ်လို့ရလား?</summary><p data-key="a3">QR တွေက Malaysia ငွေပေးချေမှုစနစ် ဖြစ်ပါတယ်။ တခြားနိုင်ငံကနေ ဝယ်ချင်ရင် WhatsApp ကနေ ဆက်သွယ်ပြီး ပေးချေနည်းကို မေးမြန်းပါ။</p></details>
+      <details class="faq-item"><summary data-key="q4">ဖုန်းနဲ့ ဖတ်လို့ရလား?</summary><p data-key="a4">ရပါတယ်။ E-book တွေက PDF ဖိုင်ဖြစ်လို့ ဖုန်း၊ Tablet၊ Laptop ဘယ်မှာမဆို ဖတ်နိုင်ပါတယ်။ တစ်ကြိမ်ဝယ်ရင် ဖိုင်က သင့်ဆီမှာ အမြဲရှိနေပါမယ်။</p></details>
+      <details class="faq-item"><summary data-key="q5">Bundle ထဲမှာ ဘာတွေ ပါလဲ?</summary><p data-key="a5">မင်းပြောင်းလဲနိုင်ပါတယ်၊ မင်းလုပ်နိုင်ပါတယ်၊ Bitcoin: The New Money နဲ့ The Rich Don't Work for Money — E-book ၄ အုပ်ကို RM 79 နဲ့ ရပါတယ်။ Digital Product Guide နဲ့ AI Image Prompts ကတော့ Bundle မပါဘဲ သီးသန့် ရောင်းပါတယ်။</p></details>
+      <details class="faq-item"><summary data-key="q6">မဝယ်ခင် နမူနာ ဖတ်ကြည့်လို့ရလား?</summary><p data-key="a6">ရပါတယ်။ အပေါ်က 'မဝယ်ခင် အခမဲ့ ဖတ်ကြည့်ပါ' မှာ စာအုပ်ရွေးပြီး WhatsApp ဒါမှမဟုတ် Telegram ကနေ အခန်း ၁ ကို အခမဲ့ တောင်းနိုင်ပါတယ်။</p></details>
+      <details class="faq-item"><summary data-key="q7">AI Image Prompts ဝယ်ရင် ဘာရမလဲ?</summary><p data-key="a7">Facebook မှာ တင်နေတဲ့ AI ပုံတွေကို ဖန်တီးခဲ့တဲ့ Prompt တွေကို ဖိုင်အဖြစ် ရပါမယ်။ Copy ကူးပြီး AI ပုံဖန်တီးတဲ့ tool ထဲ ထည့်ရုံပါပဲ။</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL MEDIA SECTION -->
+<section id="contact" style="padding: 60px 5%; background: var(--page); border-top: 1px solid var(--line);">
+  <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+    <p style="font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;" data-key="social_label">ကျွန်ုပ်တို့နှင့် ဆက်သွယ်ပါ</p>
+    <h2 style="font-size:28px;font-weight:600;letter-spacing:-0.5px;margin-bottom:10px;" data-key="social_h2">Social Media မှာ Follow လုပ်ပါ</h2>
+    <p style="font-size:15px;color:var(--ink-soft);margin-bottom:36px;" data-key="social_sub">နောက်ဆုံး update များနှင့် အကြောင်းအရာများ ရရှိရန်</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;max-width:600px;margin:0 auto 40px;">
+
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/share/181cxysH1S/" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(24,119,242,0.12)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#1877f2;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Facebook</div>
+          <div style="font-size:12px;color:#1877f2;margin-top:2px;">Ong Sike Books</div>
+        </div>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/mehm.ong.sike" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(225,48,108,0.12)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Instagram</div>
+          <div style="font-size:12px;color:#e1306c;margin-top:2px;">@mehm.ong.sike</div>
+        </div>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://www.tiktok.com/@mehm.ong.sike" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(0,0,0,0.1)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#111;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">TikTok</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">@mehm.ong.sike</div>
+        </div>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/6001128381539" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(37,211,102,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#25d366;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">WhatsApp</div>
+          <div style="font-size:12px;color:#25d366;margin-top:2px;">+60 011-2838 1539</div>
+        </div>
+      </a>
+
+      <!-- Telegram -->
+      <a href="https://t.me/mehmongsike17" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(34,158,217,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#229ed9;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Telegram</div>
+          <div style="font-size:12px;color:#229ed9;margin-top:2px;">@mehmongsike17</div>
+        </div>
+      </a>
+
+      <!-- Gmail -->
+      <a href="mailto:minaungchanko1516@gmail.com?subject=E-book%20You%20Can%20Change%20(RM19.90)&body=Hello%2C%20I%20want%20to%20buy%20the%20e-book%20%22You%20Can%20Change%22." 
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(234,67,53,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#ea4335;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Gmail</div>
+          <div style="font-size:12px;color:#ea4335;margin-top:2px;">minaungchanko1516</div>
+        </div>
+      </a>
+
+      <!-- Line -->
+      <a href="https://line.me/ti/p/~aung200715" target="_blank"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(6,199,85,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;background:#06c755;display:flex;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Line</div>
+          <div style="font-size:12px;color:#06c755;margin-top:2px;">aung200715</div>
+        </div>
+      </a>
+
+      <!-- Viber -->
+      <a href="viber://chat?number=%2B6001128381539"
+         style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:transform .2s,box-shadow .2s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 28px rgba(115,96,242,0.15)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+        <div style="width:52px;height:52px;border-radius:14px;overflow:hidden;">
+          <img src="assets/image-47ebcd8e.jpg" width="52" height="52" style="object-fit:cover;width:100%;height:100%;" loading="lazy">
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);">Viber</div>
+          <div style="font-size:12px;color:#7360f2;margin-top:2px;">+60 011-2838 1539</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div data-key="footer">© 2026 Ong Sike Books · မြန်မာ E-books နှင့် AI Prompts</div>
+  <div>
+    <a href="#contact" data-key="f_contact">ဆက်သွယ်ရန်</a>
+    <a href="https://wa.me/6001128381539" target="_blank">WhatsApp</a> <a href="https://www.facebook.com/share/181cxysH1S/" target="_blank">Facebook</a>
+  </div>
+</footer>
+
+<script>
+const t = {
+  my: {
+    nav_cta:"ဝယ်ယူရန်", nav_books:"စာအုပ်များ", nav_contents:"အကြောင်းအရာ", nav_reviews:"သုံးသပ်ချက်", nav_contact:"ဆက်သွယ်ရန်", nav_prompts:"AI Prompts",
+    hero_badge:"E-book အသစ် — Digital Product Guide 2026", trust1:"မြန်မာဘာသာဖြင့်", trust2:"ဖုန်းဖြင့် ဖတ်နိုင်", trust3:"WhatsApp ဖြင့် ပို့ပေး", trust4:"QR ဖြင့် ပေးချေ",
+    side1:"E-Books", side2:"အခန်းများ", side3:"သုံးသပ်ချက်", side4:"ငွေပေးချေရန်", side5:"ဆက်သွယ်ရန်",
+    mock_title:"စာကြည့်တိုက်", mock_pill:"RM 19.90 မှစ", ms1:"↗ + AI Prompts", ms2l:"အခန်းများ", ms3l:"ပေးချေနည်း",
+    card_btn:"ဝယ်ယူရန် →", card_btn2:"ဝယ်ယူရန် →", card_btn3:"ဝယ်ယူရန် →", card_btn4:"ဝယ်ယူရန် →", card_btn5:"ဝယ်ယူရန် →", badge5:"အသစ်", card_btn6:"ဝယ်ယူရန် →", badge6:"အသစ်", badge2:"အသစ်", eyebrow:"Self-Improvement · Motivation",
+    hero_h1:"ဘဝကို ပြောင်းလဲပေးမယ့်<br><em>စာအုပ်များ။</em>",
+    hero_sub:"မြန်မာဘာသာဖြင့် ရေးသားထားသော E-books ၅ အုပ် — Mindset၊ Discipline၊ ငွေကြေး၊ Bitcoin နှင့် Digital Product အကြောင်း လက်တွေ့လမ်းညွှန်များ နှင့် AI Image Prompts အသစ်",
+    hero_btn1:"ဝယ်ယူရန်", hero_btn2:"အကြောင်းအရာကြည့်ရန်",
+    stat1:"အခန်းများ", stat2:"WhatsApp ဖြင့် ပို့ပေး", stat3_num:"မြန်မာ", stat3:"ဘာသာဖြင့်",
+    badge:"Ong Sike Version",
+    ch_label:"E-book ၁ · မင်းပြောင်းလဲနိုင်ပါတယ်", ch_h2:"မင်းပြောင်းလဲနိုင်ပါတယ် — အခန်း ၈ ခန်း",
+    ch_sub:"ဘဝမပြောင်းလဲနိုင်ဘူးလို့ ထင်ရတဲ့ အကြောင်းရင်းများမှ စတင်ကာ တကယ်ပြောင်းလဲနိုင်သည့် လက်တွေ့နည်းလမ်းများ တဆင့်ချင်း ဖော်ပြထားသည်",
+    c1t:"မပြောင်းလဲနိုင်ဘူးလို့ ထင်ရတဲ့ အကြောင်းရင်းများ", c1d:"ကြောက်ရွ့ံမှု၊ အတိတ်အမှားများနှင့် ပတ်ဝန်းကျင်၏ သက်ရောက်မှု",
+    c2t:"အတွေးအခေါ် ပြောင်းလဲခြင်း (Mindset)", c2d:"Fixed vs Growth Mindset — ကြောက်ရွ့ံမှုကို အနိုင်ယူနည်း",
+    c3t:"လက်ရှိဘဝကို တာဝန်ယူခြင်း", c3d:"အကြောင်းပြချက်မများဘဲ ကိုယ့်ဘဝကို ကိုယ်ထိန်းချုပ်ရန်",
+    c4t:"သေးသေးလေးကစတင်ပါ", c4d:"ကြီးမားသော ပြောင်းလဲမှုများသည် သေးငယ်သော ခြေလှမ်းများမှ စတင်သည်",
+    c5t:"မကျဆုံးဘူးဆိုတာ မရှိပါ", c5d:"ကျဆုံးမှုကို ရန်သူမဟုတ်ဘဲ ဆရာအဖြစ် မြင်နည်း",
+    c6t:"စည်းကမ်းနှင့် အလေ့အကျင့်", c6d:"Motivation မဟုတ်ဘဲ Discipline ဖြင့် ဘဝကို တည်ဆောက်နည်း",
+    c7t:"မင်းလိုချင်တဲ့ ဘဝကို မြင်ယောင်ပါ", c7d:"Visualization ဖြင့် ဆုံးဖြတ်ချက်များကို ဦးတည်နည်း",
+    c8t:"မင်းတကယ်ပြောင်းလဲနိုင်တယ်", c8d:"ယနေ့ကစတင်ကာ မင်း၏ ဘဝဇာတ်လမ်းအသစ်ကို ဆက်ရေးပါ",
+    f_label:"ဘာကြောင့် Ong Sike Books", f_h2:"ဒီ E-book တွေ ဝယ်ရမည့် အကြောင်း",
+    f_sub:"ရှင်းလင်းသော ဘာသာစကားဖြင့် လက်တွေ့ကျသော အကြောင်းအရာများ",
+    f1t:"မြန်မာဘာသာ", f1d:"ဘယ်သူမဆို နားလည်လွယ်သော ရိုးရှင်းသည့် မြန်မာဘာသာဖြင့် ရေးသားထားသည်",
+    f2t:"WhatsApp ဖြင့် ပို့ပေးမည်", f2d:"ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ဖိုင်ကို WhatsApp မှတဆင့် ပို့ပေးပါမည်",
+    f3t:"ဘယ် Device မှမဆို", f3d:"Phone, tablet, laptop တွင် ဖတ်ရှုနိုင်သည်",
+    f4t:"တစ်ကြိမ်ဝယ် ထာဝစဉ်", f4d:"တစ်ကြိမ်ဝယ်ယူလျှင် ထာဝစဉ် ဖတ်ရှုခွင့်ရမည်",
+    buy_label:"🎁 Bundle · RM 35.87 သက်သာ", buy_h2:"E-Books ၄ အုပ်လုံး",
+    buy_sub:"မင်းပြောင်းလဲနိုင်ပါတယ်၊ မင်းလုပ်နိုင်ပါတယ်၊ Bitcoin: The New Money နဲ့ The Rich Don't Work for Money — E-book ၄ အုပ်လုံးကို Bundle နဲ့ တစ်ခါတည်းဝယ်ရင် RM 35.87 သက်သာပါတယ်။",
+    currency:"RM", price_old:"RM 114.87", buy_btn:"Bundle ဝယ်ယူရန် →", buy_single:"သို့မဟုတ် တစ်အုပ်ချင်း ရွေးဝယ်ရန်",
+    pick_bundle:"E-book ၄ အုပ်လုံး Bundle", gal_title:"ဒီ Prompt တွေနဲ့ ဖန်တီးထားတဲ့ ပုံများ", gal_sub:"Facebook ပေါ်မှာ တင်ခဲ့တဲ့ AI ပုံတွေပါ — ပုံကိုနှိပ်ပြီး အကြီးကြည့်နိုင်ပါတယ်", gal_btn:"ဒီ Prompt တွေ ဝယ်ယူရန် — RM 9.49", pick_bundle_sub:"RM 35.87 သက်သာ",
+    nav_faq:"FAQ", sm_label:"🎁 အခမဲ့", sm_h2:"မဝယ်ခင် အခမဲ့ ဖတ်ကြည့်ပါ", sm_sub:"ဘယ်စာအုပ်ရဲ့ အခန်း ၁ ကိုမဆို အခမဲ့ ပို့ပေးပါမယ်။ စာအုပ်ရွေးပြီး WhatsApp ဒါမှမဟုတ် Telegram ကနေ တောင်းလိုက်ပါ။", sm_wa:"💬 WhatsApp မှ တောင်းရန်", sm_tg:"Telegram မှ တောင်းရန် →", sm_link:"📖 အခမဲ့ နမူနာ ဖတ်ရန်", faq_h2:"မေးလေ့ရှိသော မေးခွန်းများ", faq_sub:"မေးစရာ ကျန်သေးရင် WhatsApp ကနေ မေးနိုင်ပါတယ်", q1:"ငွေပေးပြီး ဘယ်လောက်ကြာမှ E-book ရမလဲ?", a1:"ငွေလွှဲ screenshot ကို WhatsApp ပို့ပြီး ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ဖိုင်ကို WhatsApp ကနေ ပို့ပေးပါတယ်။ ၂၄ နာရီအတွင်း ပြန်လည်တုံ့ပြန်ပေးပါတယ်။", q2:"ဘယ်လို ငွေပေးချေရမလဲ?", a2:"ဝယ်ယူရန် ကိုနှိပ်ပြီး စာအုပ်ရွေးပါ။ ပြီးရင် Maybank၊ Touch 'n Go ဒါမှမဟုတ် Merchantrade DuitNow QR ကို သင့် Banking / E-wallet app နဲ့ scan ဖတ်ပြီး ပေးချေနိုင်ပါတယ်။", q3:"Malaysia ပြင်ပကနေ ဝယ်လို့ရလား?", a3:"QR တွေက Malaysia ငွေပေးချေမှုစနစ် ဖြစ်ပါတယ်။ တခြားနိုင်ငံကနေ ဝယ်ချင်ရင် WhatsApp ကနေ ဆက်သွယ်ပြီး ပေးချေနည်းကို မေးမြန်းပါ။", q4:"ဖုန်းနဲ့ ဖတ်လို့ရလား?", a4:"ရပါတယ်။ E-book တွေက PDF ဖိုင်ဖြစ်လို့ ဖုန်း၊ Tablet၊ Laptop ဘယ်မှာမဆို ဖတ်နိုင်ပါတယ်။ တစ်ကြိမ်ဝယ်ရင် ဖိုင်က သင့်ဆီမှာ အမြဲရှိနေပါမယ်။", q5:"Bundle ထဲမှာ ဘာတွေ ပါလဲ?", a5:"မင်းပြောင်းလဲနိုင်ပါတယ်၊ မင်းလုပ်နိုင်ပါတယ်၊ Bitcoin: The New Money နဲ့ The Rich Don't Work for Money — E-book ၄ အုပ်ကို RM 79 နဲ့ ရပါတယ်။ Digital Product Guide နဲ့ AI Image Prompts ကတော့ Bundle မပါဘဲ သီးသန့် ရောင်းပါတယ်။", q6:"မဝယ်ခင် နမူနာ ဖတ်ကြည့်လို့ရလား?", a6:"ရပါတယ်။ အပေါ်က 'မဝယ်ခင် အခမဲ့ ဖတ်ကြည့်ပါ' မှာ စာအုပ်ရွေးပြီး WhatsApp ဒါမှမဟုတ် Telegram ကနေ အခန်း ၁ ကို အခမဲ့ တောင်းနိုင်ပါတယ်။", q7:"AI Image Prompts ဝယ်ရင် ဘာရမလဲ?", a7:"Facebook မှာ တင်နေတဲ့ AI ပုံတွေကို ဖန်တီးခဲ့တဲ့ Prompt တွေကို ဖိုင်အဖြစ် ရပါမယ်။ Copy ကူးပြီး AI ပုံဖန်တီးတဲ့ tool ထဲ ထည့်ရုံပါပဲ။",
+    inc1:"မင်းပြောင်းလဲနိုင်ပါတယ် — RM 19.90", inc2:"မင်းလုပ်နိုင်ပါတယ် — RM 29.99 (NEW!)",
+    inc6:"Bitcoin: The New Money — RM 24.99 (NEW!)", inc8:"The Rich Don't Work for Money — RM 39.99 (NEW!)", inc9:"Digital Product Business Guide 2026 — RM 14.90 (NEW! · Bundle မပါ)", inc7:"AI Image Prompts — RM 9.49 (Bundle မပါ၊ သီးသန့်ရောင်းသည်)", inc3:"ဘယ် Device မှမဆို ဖတ်ရှုနိုင်", inc4:"တစ်ကြိမ်ဝယ် ထာဝစဉ် ဖတ်ရှုခွင့်",
+    inc5:"Touch'n Go / DuitNow ဖြင့် ပေးချေနိုင်",
+    rev_label:"ဖောက်သည်များ မှတ်ချက်", rev_h2:"သူများ ဘာပြောကြသနည်း", rev_sub:"စစ်မှန်သော သုံးသပ်ချက်များ",
+    r1:'"ဒီ E-book ဖတ်ပြီးနောက် ကိုယ့်ဘဝကို တာဝန်ယူနည်းကို နားလည်သွားတယ်။ Mindset ပြောင်းလဲမှုအပိုင်းက တကယ်ကို အသုံးဝင်တယ်"',
+    r1n:"မောင်သောင်း", r1r:"ကျောင်းသား · ရန်ကုန်",
+    r2:'"Discipline နဲ့ Habit တည်ဆောက်ခြင်းအပိုင်းက ငါ့ဘဝကိုတကယ်ပြောင်းပေးတယ်။ ဒီစာအုပ်ကို မည်သူမဆို ဖတ်သင့်တယ်"',
+    r2n:"နန်းမိုး", r2r:"လုပ်ငန်းရှင် · မန္တလေး",
+    r3:'"ကျဆုံးမှုကို မကြောက်တော့ဘူး။ ဒီစာအုပ်ဖတ်ပြီး ကျဆုံးမှုကို ဆရာအဖြစ်မြင်တတ်လာတယ်"',
+    r3n:"အောင်ဇင်", r3r:"Freelancer · ရခိုင်",
+    pay_label:"ငွေပေးချေရန် · အဆင့် ၂/၂", pick_label:"ငွေပေးချေရန် · အဆင့် ၁/၂", pick_title:"ဝယ်ယူမည့်ပစ္စည်း ရွေးပါ", pick_sub:"ဝယ်ယူလိုသော E-book သို့မဟုတ် Prompt ကို နှိပ်ပါ", pick_back:"← E-book ပြန်ရွေးရန်", pick_chosen:"ရွေးထားသည်", pay_title:"ငွေပေးချေမှု နည်းလမ်းရွေးပါ", pay_sub:"RM 19.90 — ဝယ်ယူချင်သော နည်းလမ်းကို ရွေးချယ်ပါ",
+    pay_bank:"Maybank · Malaysia National QR",
+    pay_note:"✅ ပေးချေပြီးနောက် screenshot ရိုက်ကာ WhatsApp သို့ ပေးပို့ပါ — ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ပို့ပေးပါမည်",
+    pay_wa:"💬 WhatsApp သို့ ဆက်သွယ်ပါ",
+    pay_footer:"+6001128381539 · 24 နာရီအတွင်း ပြန်လည်တုံ့ပြန်မည်",
+    footer:"© 2026 Ong Sike Books · မြန်မာ E-books နှင့် AI Prompts", f_contact:"ဆက်သွယ်ရန်"
+  },
+  en: {
+    nav_cta:"Buy Now", nav_books:"Books", nav_contents:"Contents", nav_reviews:"Reviews", nav_contact:"Contact", nav_prompts:"AI Prompts",
+    hero_badge:"New e-book — Digital Product Guide 2026", trust1:"In Myanmar", trust2:"Read on your phone", trust3:"Sent on WhatsApp", trust4:"Pay by QR",
+    side1:"E-Books", side2:"Chapters", side3:"Reviews", side4:"Payment", side5:"Contact",
+    mock_title:"Library", mock_pill:"From RM 19.90", ms1:"↗ + AI Prompts", ms2l:"Chapters", ms3l:"Payment",
+    card_btn:"Buy now →", card_btn2:"Buy now →", card_btn3:"Buy now →", card_btn4:"Buy now →", card_btn5:"Buy now →", badge5:"New!", card_btn6:"Buy now →", badge6:"New!", badge2:"New!", eyebrow:"Self-Improvement · Motivation",
+    hero_h1:"Books that<br><em>change your life.</em>",
+    hero_sub:"Five e-books in Myanmar language on mindset, discipline, money, Bitcoin and digital products, plus new AI Image Prompts — practical guides for a better life and future.",
+    hero_btn1:"Buy Now", hero_btn2:"View Contents",
+    stat1:"Chapters", stat2:"Sent on WhatsApp", stat3_num:"Myanmar", stat3:"Language",
+    badge:"Ong Sike Version",
+    ch_label:"E-book 1 · You Can Change", ch_h2:"You Can Change — 8 Chapters",
+    ch_sub:"From understanding why you feel stuck, to practical step-by-step methods for real, lasting change",
+    c1t:"Why You Think You Can't Change", c1d:"Fear, past mistakes, and the hidden influence of your environment",
+    c2t:"Changing Your Mindset", c2d:"Fixed vs Growth Mindset — how to overcome fear and self-doubt",
+    c3t:"Taking Responsibility for Your Life", c3d:"Stop making excuses and reclaim control of your own story",
+    c4t:"Start Small", c4d:"Big transformations always begin with tiny, consistent steps",
+    c5t:"Failure Is Not the End", c5d:"How to see failure as a teacher, not an enemy",
+    c6t:"Discipline and Habit", c6d:"Build your life through discipline, not fleeting motivation",
+    c7t:"Visualize the Life You Want", c7d:"Use visualization to guide your decisions and daily actions",
+    c8t:"You Truly Can Change", c8d:"Start today and write the next chapter of your life",
+    f_label:"Why Ong Sike Books", f_h2:"Why You Should Buy These E-Books",
+    f_sub:"Written in clear, accessible language with practical, real-world content",
+    f1t:"Myanmar Language", f1d:"Written in simple, easy-to-understand Myanmar language for all readers",
+    f2t:"Sent on WhatsApp", f2d:"Your PDF is sent on WhatsApp as soon as your payment is confirmed",
+    f3t:"Any Device", f3d:"Read on your phone, tablet, or laptop anytime",
+    f4t:"Buy Once, Keep Forever", f4d:"One purchase gives you permanent access",
+    buy_label:"🎁 Bundle · Save RM 35.87", buy_h2:"All 4 E-Books",
+    buy_sub:"Get You Can Change, You Can Do It, Bitcoin: The New Money and The Rich Don't Work for Money together and save RM 35.87.",
+    currency:"RM", price_old:"RM 114.87", buy_btn:"Buy the Bundle →", buy_single:"or choose a single e-book",
+    pick_bundle:"All 4 e-books bundle", gal_title:"Images made with these prompts", gal_sub:"AI images I posted on Facebook — tap one to see it larger", gal_btn:"Buy these prompts — RM 9.49", pick_bundle_sub:"Save RM 35.87",
+    nav_faq:"FAQ", sm_label:"🎁 Free", sm_h2:"Read it free before you buy", sm_sub:"Get chapter 1 of any book free. Choose a book and ask on WhatsApp or Telegram.", sm_wa:"💬 Ask on WhatsApp", sm_tg:"Ask on Telegram →", sm_link:"📖 Read a free sample", faq_h2:"Frequently asked questions", faq_sub:"Still have a question? Ask us on WhatsApp", q1:"How soon do I get the e-book after paying?", a1:"Send your payment screenshot on WhatsApp. Once the payment is confirmed, the PDF is sent to you on WhatsApp. We reply within 24 hours.", q2:"How do I pay?", a2:"Tap Buy, choose your book, then scan the Maybank, Touch 'n Go or Merchantrade DuitNow QR with your banking or e-wallet app.", q3:"Can I buy from outside Malaysia?", a3:"The QR codes are Malaysian payment methods. If you are in another country, message us on WhatsApp to ask how to pay.", q4:"Can I read it on my phone?", a4:"Yes. The e-books are PDF files, so you can read them on a phone, tablet or laptop, and the file stays with you.", q5:"What is in the bundle?", a5:"You Can Change, You Can Do It, Bitcoin: The New Money and The Rich Don't Work for Money — 4 e-books for RM 79. The Digital Product Guide and AI Image Prompts are sold separately.", q6:"Can I read a sample before buying?", a6:"Yes. In 'Read it free before you buy' above, choose a book and ask for chapter 1 free on WhatsApp or Telegram.", q7:"What do I get with AI Image Prompts?", a7:"A file with the prompts behind the AI images I post on Facebook. Copy a prompt into an AI image tool to make your own.",
+    inc1:"You Can Change — RM 19.90", inc2:"You Can Do It — RM 29.99 (NEW!)",
+    inc6:"Bitcoin: The New Money — RM 24.99 (NEW!)", inc8:"The Rich Don't Work for Money — RM 39.99 (NEW!)", inc9:"Digital Product Business Guide 2026 — RM 14.90 (NEW! · not in bundle)", inc7:"AI Image Prompts — RM 9.49 (sold separately)", inc3:"Read on any device", inc4:"Lifetime access",
+    inc5:"Pay via Touch'n Go / DuitNow / Bank Transfer",
+    rev_label:"Customer Reviews", rev_h2:"What Readers Are Saying", rev_sub:"Genuine reviews from real readers",
+    r1:'"After reading this e-book, I finally understood how to take responsibility for my life. The mindset section was genuinely eye-opening."',
+    r1n:"Maung Thaung", r1r:"Student · Yangon",
+    r2:'"The chapters on discipline and habit-building actually changed my life. Everyone should read this book."',
+    r2n:"Nan Moe", r2r:"Business Owner · Mandalay",
+    r3:'"I\'m no longer afraid of failing. This book taught me to see failure as a teacher, and it changed everything."',
+    r3n:"Aung Zin", r3r:"Freelancer · Rakhine",
+    pay_label:"Payment · Step 2 of 2", pick_label:"Payment · Step 1 of 2", pick_title:"Choose your item", pick_sub:"Tap the e-book or prompt pack you want to buy", pick_back:"← Choose another e-book", pick_chosen:"Selected", pay_title:"Choose Payment Method", pay_sub:"RM 19.90 — Select how you would like to pay",
+    pay_bank:"Maybank · Malaysia National QR",
+    pay_note:"✅ After payment, screenshot and send to WhatsApp — PDF will be sent once payment is confirmed",
+    pay_wa:"💬 Contact via WhatsApp",
+    pay_footer:"+6001128381539 · Reply within 24 hours",
+    footer:"© 2026 Ong Sike Books · Myanmar e-books & AI prompts", f_contact:"Contact"
+  }
+};
+
+function setLang(lang, ev) {
+  const data = t[lang];
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.getAttribute('data-key');
+    if (data[k] !== undefined) el.innerHTML = data[k];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  ev.target.classList.add('active');
+  document.documentElement.lang = lang === 'my' ? 'my' : 'en';
+}
+</script>
+
+<!-- PAYMENT MODAL -->
+<div id="payModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--surface);border-radius:20px;max-width:440px;width:100%;padding:32px 28px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="document.getElementById('payModal').style.display='none'" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-faint);line-height:1;">✕</button>
+
+    <div id="payPick">
+      <p class="pay-step-label" data-key="pick_label">ငွေပေးချေရန် · အဆင့် ၁/၂</p>
+      <h3 class="pay-h3" data-key="pick_title">ဝယ်ယူမည့်ပစ္စည်း ရွေးပါ</h3>
+      <p class="pay-sub" data-key="pick_sub">ဝယ်ယူလိုသော E-book သို့မဟုတ် Prompt ကို နှိပ်ပါ</p>
+      <div class="pick-list">
+      <button class="pick-item pick-bundle" onclick="openPay('E-book ၄ အုပ် Bundle', 'RM 79', -1)">
+        <span class="pick-bundle-icon">🎁</span>
+        <span class="pick-text"><span class="pick-name" data-key="pick_bundle">E-book ၄ အုပ်လုံး Bundle</span><span class="pick-en"><s>RM 114.87</s> · <span data-key="pick_bundle_sub">RM 35.87 သက်သာ</span></span></span>
+        <span class="pick-price">RM 79</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('မင်းပြောင်းလဲနိုင်ပါတယ်', 'RM 19.90', 0)">
+        <img data-cover="0" alt="">
+        <span class="pick-text"><span class="pick-name">မင်းပြောင်းလဲနိုင်ပါတယ်</span><span class="pick-en">You Can Change</span></span>
+        <span class="pick-price">RM 19.90</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('မင်းလုပ်နိုင်ပါတယ်', 'RM 29.99', 1)">
+        <img data-cover="1" alt="">
+        <span class="pick-text"><span class="pick-name">မင်းလုပ်နိုင်ပါတယ်</span><span class="pick-en">You Can Do It</span></span>
+        <span class="pick-price">RM 29.99</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('Bitcoin: The New Money', 'RM 24.99', 2)">
+        <img data-cover="2" alt="">
+        <span class="pick-text"><span class="pick-name">Bitcoin: The New Money</span><span class="pick-en">Educational e-book</span></span>
+        <span class="pick-price">RM 24.99</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('The Rich Don\'t Work for Money', 'RM 39.99', 4)">
+        <img data-cover="4" alt="">
+        <span class="pick-text"><span class="pick-name">The Rich Don't Work for Money</span><span class="pick-en">ငွေကြေး လက်တွေ့လမ်းညွှန်</span></span>
+        <span class="pick-price">RM 39.99</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('Digital Product Business Guide 2026', 'RM 14.90', 5)">
+        <img data-cover="5" alt="">
+        <span class="pick-text"><span class="pick-name">Digital Product Business Guide 2026</span><span class="pick-en">Digital Product လမ်းညွှန်</span></span>
+        <span class="pick-price">RM 14.90</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      <button class="pick-item" onclick="openPay('AI Image Prompts', 'RM 9.49', 3)">
+        <img data-cover="3" alt="">
+        <span class="pick-text"><span class="pick-name">AI Image Prompts</span><span class="pick-en">Prompt pack</span></span>
+        <span class="pick-price">RM 9.49</span>
+        <span class="pick-arrow">›</span>
+      </button>
+      </div>
+    </div>
+
+    <div id="payStep">
+    <button class="pay-back" onclick="openPay()" data-key="pick_back">← E-book ပြန်ရွေးရန်</button>
+
+    <p style="font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px;" data-key="pay_label">ငွေပေးချေရန် · အဆင့် ၂/၂</p>
+    <h3 style="font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px;" data-key="pay_title">ငွေပေးချေမှု နည်းလမ်းရွေးပါ</h3>
+    <div class="pay-selected"><img id="paySelImg" alt=""><div><div id="paySelName"></div><div id="paySelPrice"></div></div><span data-key="pick_chosen">ရွေးထားသည်</span></div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:20px;" data-key="pay_sub">RM 19.90 — ဝယ်ယူချင်သော နည်းလမ်းကို ရွေးချယ်ပါ</p>
+
+    <!-- METHOD SELECTOR -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+      <button onclick="showMethod('qr')" id="btn_qr"
+        style="padding:12px 8px;border-radius:10px;border:2px solid var(--accent);background:var(--accent-soft);font-size:13px;font-weight:600;color:var(--accent-text);cursor:pointer;font-family:inherit;transition:all .15s;">
+        📱 DuitNow QR
+      </button>
+      <button onclick="showMethod('wa')" id="btn_wa"
+        style="padding:12px 8px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:inherit;transition:all .15s;">
+        💬 WhatsApp
+      </button>
+    </div>
+
+    <!-- QR METHOD -->
+    <div id="method_qr">
+
+      <!-- QR Bank Selector -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+
+        <!-- Maybank -->
+        <button onclick="showQR('maybank')" id="qr_maybank_btn"
+          style="padding:10px 6px;border-radius:12px;border:2px solid var(--accent);background:var(--accent-soft);font-size:10px;font-weight:600;color:var(--accent-text);cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <img src="assets/image-7ca072e4.png" style="width:36px;height:36px;border-radius:8px;object-fit:cover;" loading="lazy">
+          Maybank<br><span style="font-weight:400;font-size:9px;color:var(--ink-faint);">DuitNow QR</span>
+        </button>
+
+        <!-- TNG -->
+        <button onclick="showQR('tng')" id="qr_tng_btn"
+          style="padding:10px 6px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-size:10px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <img src="assets/image-edd391a6.png" style="width:36px;height:36px;border-radius:8px;object-fit:cover;" loading="lazy">
+          TNG<br><span style="font-weight:400;font-size:9px;color:var(--ink-faint);">eWallet QR</span>
+        </button>
+
+        <!-- Merchantrade -->
+        <button onclick="showQR('mt')" id="qr_mt_btn"
+          style="padding:10px 6px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-size:10px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <img src="assets/image-4d4b3734.png" style="width:36px;height:36px;border-radius:8px;object-fit:cover;" loading="lazy">
+          Merchantrade<br><span style="font-weight:400;font-size:9px;color:var(--ink-faint);">DuitNow QR</span>
+        </button>
+
+      </div>
+
+      <!-- Maybank QR -->
+      <div id="qr_maybank" style="text-align:center;margin-bottom:16px;">
+        <img src="assets/duitnow-qr-min-aung-chan-ko-f9178bf8.jpg"
+             alt="DuitNow QR - MIN AUNG CHAN KO"
+             style="width:220px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto;" loading="lazy">
+        <p style="font-size:13px;font-weight:600;color:var(--ink);margin-top:10px;">MIN AUNG CHAN KO</p>
+        <p style="font-size:12px;color:var(--ink-faint);">Maybank · DuitNow QR</p>
+      </div>
+
+      <!-- TNG QR -->
+      <div id="qr_tng" style="display:none;text-align:center;margin-bottom:16px;">
+        <img src="assets/tng-ewallet-qr-min-aung-chan-ko-c7722a5f.jpg"
+             alt="TNG eWallet QR - MIN AUNG CHAN KO"
+             style="width:220px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto;" loading="lazy">
+        <p style="font-size:13px;font-weight:600;color:var(--ink);margin-top:10px;">MIN AUNG CHAN KO</p>
+        <p style="font-size:12px;color:var(--ink-faint);">Touch 'n Go eWallet · Malaysia National QR</p>
+      </div>
+
+
+      <!-- Merchantrade QR -->
+      <div id="qr_mt" style="display:none;text-align:center;margin-bottom:16px;">
+        <img src="assets/merchantrade-duitnow-qr-min-aung-chan-ko-ddc9f143.jpg"
+             alt="Merchantrade DuitNow QR - MIN AUNG CHAN KO"
+             style="width:220px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto;" loading="lazy">
+        <p style="font-size:13px;font-weight:600;color:var(--ink);margin-top:10px;">MIN AUNG CHAN KO</p>
+        <p style="font-size:12px;color:var(--ink-faint);">Merchantrade · DuitNow QR</p>
+      </div>
+
+      <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:14px;margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--ok-text);line-height:1.6;" data-key="pay_qr_note">✅ QR scan ဆွဲပြီး RM 19.90 ပေးချေပါ၊ screenshot ရိုက်ကာ WhatsApp သို့ ပေးပို့ပါ — ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ပို့ပေးပါမည်</p>
+      </div>
+      <a href="https://wa.me/6001128381539?text=Hello%2C%20I%20have%20paid%20RM19.90%20via%20DuitNow%20QR%20for%20the%20e-book%20%22You%20Can%20Change%22.%20Please%20send%20me%20the%20PDF."
+         target="_blank"
+         style="display:block;background:#25d366;color:#fff;text-decoration:none;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:600;" data-key="pay_wa_after">
+        💬 ပေးပြီးပြီဆိုရင် WhatsApp နှိပ်ပါ
+      </a>
+    </div>
+
+    <!-- WHATSAPP METHOD -->
+    <div id="method_wa" style="display:none;">
+      <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:16px;margin-bottom:16px;text-align:center;">
+        <p style="font-size:28px;margin-bottom:8px;">💬</p>
+        <p style="font-size:14px;font-weight:600;color:var(--ok-text);margin-bottom:4px;" data-key="wa_title">WhatsApp မှတဆင့် ဆက်သွယ်ပါ</p>
+        <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;" data-key="wa_desc">WhatsApp သို့ message ပေးပို့ပြီး ငွေပေးချေနည်း လမ်းညွှန်ချက် ရယူပါ</p>
+      </div>
+      <div style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:10px;padding:12px;margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--warn-text);line-height:1.6;" data-key="wa_note">📦 ငွေပေးချေပြီးနောက် ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ဖိုင်ကို WhatsApp မှတဆင့် ပို့ပေးပါမည်</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <a href="https://wa.me/6001128381539?text=Hello%2C%20I%20want%20to%20buy%20the%20e-book%20%22You%20Can%20Change%22%20(RM19.90).%20Please%20guide%20me%20on%20payment."
+           target="_blank"
+           style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:600;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a href="https://t.me/mehmongsike17"
+           target="_blank"
+           style="display:flex;align-items:center;justify-content:center;gap:8px;background:#229ed9;color:#fff;text-decoration:none;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:600;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Telegram
+        </a>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:var(--ink-faint);text-align:center;margin-top:14px;" data-key="pay_footer">+6001128381539 · 24 နာရီအတွင်း ပြန်လည်တုံ့ပြန်မည်</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPay(book, price, idx) {
+  var m = document.getElementById('payModal');
+  var covers = document.querySelectorAll('.book-card img');
+  m.querySelectorAll('img[data-cover]').forEach(function (img) {
+    if (!img.src && covers[img.dataset.cover]) img.src = covers[img.dataset.cover].src;
+  });
+  var picking = !book;
+  document.getElementById('payPick').style.display = picking ? 'block' : 'none';
+  document.getElementById('payStep').style.display = picking ? 'none' : 'block';
+  if (!picking) {
+    var en = document.documentElement.lang === 'en';
+    document.getElementById('paySelName').textContent = book;
+    document.getElementById('paySelPrice').textContent = price;
+    var selImg = document.getElementById('paySelImg');
+    selImg.src = covers[idx] ? covers[idx].src : '';
+    selImg.style.display = covers[idx] ? '' : 'none';
+    m.querySelector('[data-key="pay_qr_note"]').innerHTML = en
+      ? '✅ Scan the QR and pay ' + price + ', then send the screenshot on WhatsApp — the PDF will be sent once your payment is confirmed'
+      : '✅ QR scan ဆွဲပြီး ' + price + ' ပေးချေပါ၊ screenshot ရိုက်ကာ WhatsApp သို့ ပေးပို့ပါ — ငွေဝင်ကြောင်း စစ်ပြီးတာနဲ့ PDF ပို့ပေးပါမည်';
+    m.querySelectorAll('a[href^="https://wa.me"]').forEach(function (a) {
+      a.href = 'https://wa.me/6001128381539?text=' + encodeURIComponent('Hello, I want to buy the e-book "' + book + '" (' + price + ').');
+    });
+    showMethod('qr');
+  }
+  m.style.display = 'flex';
+  m.firstElementChild.scrollTop = 0;
+}
+function showQR(bank) {
+  document.getElementById('qr_maybank').style.display = bank==='maybank' ? 'block' : 'none';
+  document.getElementById('qr_tng').style.display = bank==='tng' ? 'block' : 'none';
+  document.getElementById('qr_mt').style.display = bank==='mt' ? 'block' : 'none';
+  var active = 'padding:10px 6px;border-radius:10px;border:2px solid var(--accent);background:var(--accent-soft);font-size:11px;font-weight:600;color:var(--accent-text);cursor:pointer;font-family:inherit;';
+  var inactive = 'padding:10px 6px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:11px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:inherit;';
+  document.getElementById('qr_maybank_btn').style.cssText = bank==='maybank' ? active : inactive;
+  document.getElementById('qr_tng_btn').style.cssText = bank==='tng' ? active : inactive;
+  document.getElementById('qr_mt_btn').style.cssText = bank==='mt' ? active : inactive;
+}
+function showMethod(m) {
+  document.getElementById('method_qr').style.display = m==='qr' ? 'block' : 'none';
+  document.getElementById('method_wa').style.display = m==='wa' ? 'block' : 'none';
+  var activeStyle = 'padding:12px 8px;border-radius:10px;border:2px solid var(--accent);background:var(--accent-soft);font-size:13px;font-weight:600;color:var(--accent-text);cursor:pointer;font-family:inherit;';
+  var inactiveStyle = 'padding:12px 8px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:inherit;';
+  document.getElementById('btn_qr').style.cssText = m==='qr' ? activeStyle : inactiveStyle;
+  document.getElementById('btn_wa').style.cssText = m==='wa' ? activeStyle : inactiveStyle;
+}
+</script>
+
+<!-- FLOATING CHAT BUTTONS -->
+<div style="position:fixed;bottom:24px;right:24px;z-index:500;display:flex;flex-direction:column;gap:10px;align-items:flex-end;" id="chatMenu">
+
+  <!-- Chat options (hidden by default) -->
+  <div id="chatOptions" style="display:none;flex-direction:column;gap:8px;align-items:flex-end;">
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/6001128381539?text=Hello%2C%20I%20want%20to%20buy%20the%20e-book%20%22You%20Can%20Change%22%20(RM19.90)."
+       target="_blank"
+       style="display:flex;align-items:center;gap:10px;background:#25d366;color:#fff;padding:10px 16px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 4px 14px rgba(37,211,102,0.4);white-space:nowrap;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+
+    <!-- Telegram -->
+    <a href="https://t.me/mehmongsike17" target="_blank"
+       style="display:flex;align-items:center;gap:10px;background:#229ed9;color:#fff;padding:10px 16px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 4px 14px rgba(34,158,217,0.4);white-space:nowrap;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Telegram
+    </a>
+
+    <!-- Line -->
+    <a href="https://line.me/ti/p/~aung200715" target="_blank"
+       style="display:flex;align-items:center;gap:10px;background:#06c755;color:#fff;padding:10px 16px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 4px 14px rgba(6,199,85,0.4);white-space:nowrap;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      Line
+    </a>
+
+    <!-- Viber -->
+    <a href="viber://chat?number=%2B6001128381539" 
+       style="display:flex;align-items:center;gap:10px;background:#7360f2;color:#fff;padding:10px 16px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 4px 14px rgba(115,96,242,0.4);white-space:nowrap;">
+      <img src="assets/image-47ebcd8e.jpg" width="18" height="18" style="border-radius:4px;object-fit:cover;" loading="lazy">
+      Viber
+    </a>
+
+    <!-- Gmail -->
+    <a href="mailto:minaungchanko1516@gmail.com?subject=E-book%20You%20Can%20Change%20(RM19.90)&body=Hello%2C%20I%20want%20to%20buy%20the%20e-book%20%22You%20Can%20Change%22."
+       style="display:flex;align-items:center;gap:10px;background:#ea4335;color:#fff;padding:10px 16px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 4px 14px rgba(234,67,53,0.4);white-space:nowrap;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+      Gmail
+    </a>
+
+  </div>
+
+  <!-- Main toggle button -->
+  <button onclick="toggleChat()" id="chatToggleBtn"
+    style="width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(59,130,246,0.5);display:flex;align-items:center;justify-content:center;transition:transform .2s;"
+    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    💬
+  </button>
+</div>
+
+<script>
+var chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  var opts = document.getElementById('chatOptions');
+  var btn = document.getElementById('chatToggleBtn');
+  opts.style.display = chatOpen ? 'flex' : 'none';
+  btn.innerHTML = chatOpen ? '✕' : '💬';
+  btn.style.background = chatOpen ? '#475569' : 'var(--accent)';
+}
+</script>
+
+
+<script>
+// Light / dark toggle (dark is the default design)
+var SUN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+var MOON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>';
+var isLight = false;
+try { isLight = localStorage.getItem('theme') === 'light'; } catch (e) {}
+function applyTheme() {
+  document.body.classList.toggle('light', isLight);
+  document.getElementById('darkBtn').innerHTML = isLight ? MOON : SUN;
+}
+function toggleDark() {
+  isLight = !isLight;
+  applyTheme();
+  try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
+}
+applyTheme();
+</script>
+
+<div id="galleryView" onclick="this.style.display='none'"><img alt=""></div>
+<script>
+function openGallery(tile) {
+  var v = document.getElementById('galleryView');
+  v.querySelector('img').src = tile.querySelector('img').src;
+  v.style.display = 'flex';
+}
+</script>
+<script>
+var SAMPLE_BOOKS = ["မင်းပြောင်းလဲနိုင်ပါတယ်", "မင်းလုပ်နိုင်ပါတယ်", "Bitcoin: The New Money", "The Rich Don't Work for Money", "Digital Product Business Guide 2026"];
+var sampleBook = 0;
+function pickSample(i) {
+  sampleBook = i;
+  document.querySelectorAll('.sample-chip').forEach(function (c, j) { c.classList.toggle('active', j === i); });
+}
+function requestSample(app) {
+  var book = SAMPLE_BOOKS[sampleBook];
+  var msg = document.documentElement.lang === 'en'
+    ? 'Hello, I would like the free sample chapter of "' + book + '".'
+    : 'မင်္ဂလာပါ၊ "' + book + '" E-book ရဲ့ အခမဲ့ နမူနာ (အခန်း ၁) ကို ဖတ်ကြည့်ချင်ပါတယ်။';
+  window.open(app === 'wa'
+    ? 'https://wa.me/6001128381539?text=' + encodeURIComponent(msg)
+    : 'https://t.me/mehmongsike17', '_blank');
+}
+// Fill sample-chip covers from the showcase cards
+(function () {
+  var covers = document.querySelectorAll('.book-card img');
+  document.querySelectorAll('.sample-chip img[data-cover]').forEach(function (img) {
+    var c = covers[img.dataset.cover];
+    if (c) img.src = c.src;
+  });
+})();
+</script>
+</body>
+</html>
