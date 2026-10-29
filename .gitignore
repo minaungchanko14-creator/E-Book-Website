@@ -2,6 +2,9 @@
 pasted-text.txt
 index-old-design.html
 
+# Free-sample PDFs: sent on WhatsApp, not published
+samples/
+
 # Local tool and system files
 .claude/
 .DS_Store

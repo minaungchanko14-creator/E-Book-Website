@@ -82,6 +82,8 @@ def main():
         print("warning: some embedded images were not converted")
     (OUT / "index.html").write_text(out, encoding="utf-8")
     (OUT / ".nojekyll").write_text("")   # GitHub Pages: serve files as-is, no Jekyll build
+    for f in (ROOT / "public").glob("*"):   # favicon, share image (made by tools/make_share_image.swift)
+        shutil.copy(f, OUT / f.name)
     shutil.rmtree(tmp)
 
     total = sum(p.stat().st_size for p in OUT.rglob("*") if p.is_file())

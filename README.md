@@ -10,6 +10,8 @@ Live: https://minaungchanko14-creator.github.io/E-Book-Website/
 - `docs/` — the light published version (`index.html` + `assets/`). Generated; don't edit by hand.
 - `tools/build_deploy.py` — builds `docs/` from `index.html` (macOS, uses `sips`).
 - `gallery/` — source images for the AI image gallery.
+- `public/` — favicon and Facebook share image, copied into `docs/` by the build. Redraw the share image with `swift tools/make_share_image.swift`.
+- `tools/make_samples.swift` — makes free-sample PDFs (cover + chapter 1) into `samples/` from the e-book PDFs in Downloads. Not committed.
 
 ## Update the live site
 
