@@ -1,8 +1,10 @@
-"""Build a light version of the site for Netlify.
+"""Build the light, published version of the site.
 
 index.html keeps every image embedded (easy to edit). This script writes
-deploy/index.html plus deploy/assets/*, with each image saved once, resized
+docs/index.html plus docs/assets/*, with each image saved once, resized
 for how big it is shown, and loaded lazily below the first screen.
+GitHub Pages serves docs/ (Settings → Pages → main /docs); the same folder
+can be dragged into Netlify.
 
 Run from the project folder (macOS, uses `sips`):
     python3 tools/build_deploy.py
@@ -10,7 +12,7 @@ Run from the project folder (macOS, uses `sips`):
 import base64, hashlib, pathlib, re, shutil, subprocess, tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SRC, OUT = ROOT / "index.html", ROOT / "deploy"
+SRC, OUT = ROOT / "index.html", ROOT / "docs"
 ASSETS = OUT / "assets"
 
 IMG = re.compile(r'<img([^>]*?)src="data:(image/[a-z+.-]+);base64,([A-Za-z0-9+/=]+)"([^>]*)>')
@@ -79,6 +81,7 @@ def main():
     if "data:image" in out:
         print("warning: some embedded images were not converted")
     (OUT / "index.html").write_text(out, encoding="utf-8")
+    (OUT / ".nojekyll").write_text("")   # GitHub Pages: serve files as-is, no Jekyll build
     shutil.rmtree(tmp)
 
     total = sum(p.stat().st_size for p in OUT.rglob("*") if p.is_file())
